@@ -2,8 +2,8 @@
    autocodeRHX site script
    CONFIG: put your WhatsApp number here (digits only, with country code)
    ===================================================================== */
-const WHATSAPP_NUMBER = "4900000000000";
-const WHATSAPP_DISPLAY = "+49 000 0000000";
+const WHATSAPP_NUMBER = "919428853797";
+const WHATSAPP_DISPLAY = "+91 94288 53797";
 
 const LANG = (document.documentElement.lang || "en").slice(0, 2);
 const T = {

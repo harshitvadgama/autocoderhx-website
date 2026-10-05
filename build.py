@@ -26,18 +26,24 @@ ROBOTS = "index, follow, max-image-preview:large" if CUSTOM_DOMAIN else "noindex
 
 # ---------------------------------------------------------------- shared parts
 CHAT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12Z"/></svg>'
+WA_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.7a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>'
+
+# Contact (also set in assets/site.js for the chat assistant)
+WHATSAPP_NUMBER = "919428853797"
+WHATSAPP_DISPLAY = "+91 94288 53797"
+WA_LINK = "https://wa.me/" + WHATSAPP_NUMBER
 
 UI = {
- "en": {"services": "Services", "how": "How it works", "regions": "Worldwide", "faq": "FAQ", "quote": "Get a quote",
-        "contact": "Contact me", "home": "Home", "assistant": "autocodeRHX assistant", "replies": "● replies on WhatsApp",
+ "en": {"services": "Services", "how": "How it works", "regions": "Worldwide", "faq": "FAQ", "quote": "WhatsApp",
+        "contact": "Chat with us", "home": "Home", "assistant": "autocodeRHX", "replies": "Replies on WhatsApp",
         "type": "Type a message…", "send": "Send", "restart": "Start over", "close": "Close chat",
-        "foot1": "Remote coding, programming &amp; diagnostics", "foot2": "Brand names are used only to describe compatibility. autocodeRHX is not affiliated with any manufacturer.",
-        "allsvc": "All services"},
- "de": {"services": "Leistungen", "how": "Ablauf", "regions": "Weltweit", "faq": "FAQ", "quote": "Angebot anfragen",
-        "contact": "Kontakt", "home": "Start", "assistant": "autocodeRHX-Assistent", "replies": "● antwortet per WhatsApp",
+        "foot1": "Remote coding, programming and diagnostics", "foot2": "Brand names are used only to describe compatibility. autocodeRHX is not affiliated with any manufacturer.",
+        "allsvc": "All services", "wa": "WhatsApp"},
+ "de": {"services": "Leistungen", "how": "Ablauf", "regions": "Weltweit", "faq": "FAQ", "quote": "WhatsApp",
+        "contact": "Chat starten", "home": "Start", "assistant": "autocodeRHX", "replies": "Antwortet per WhatsApp",
         "type": "Nachricht schreiben…", "send": "Senden", "restart": "Neu starten", "close": "Chat schließen",
-        "foot1": "Codierung, Programmierung &amp; Diagnose aus der Ferne", "foot2": "Markennamen dienen nur zur Beschreibung der Kompatibilität. autocodeRHX steht in keiner Verbindung zu den Herstellern.",
-        "allsvc": "Alle Leistungen"},
+        "foot1": "Codierung, Programmierung und Diagnose aus der Ferne", "foot2": "Markennamen dienen nur zur Beschreibung der Kompatibilität. autocodeRHX steht in keiner Verbindung zu den Herstellern.",
+        "allsvc": "Alle Leistungen", "wa": "WhatsApp"},
 }
 
 def head(lang, title, desc, path, depth, jsonld, alternates=None, og_type="website"):
@@ -57,7 +63,7 @@ def head(lang, title, desc, path, depth, jsonld, alternates=None, og_type="websi
 <meta name="description" content="{esc(desc)}">
 <meta name="robots" content="{ROBOTS}">
 <link rel="canonical" href="{url}">
-{alt}<meta name="theme-color" content="#0A1820">
+{alt}<meta name="theme-color" content="#16191E">
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="{BRAND}">
 <meta property="og:title" content="{esc(title)}">
@@ -69,11 +75,11 @@ def head(lang, title, desc, path, depth, jsonld, alternates=None, og_type="websi
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{r}favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{r}assets/apple-touch-icon.png">
-<link rel="preload" href="{r}assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{r}assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{r}assets/fonts/barlow-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{r}assets/style.css">
 {ld}</head>
 <body>
-<div class="grid-bg" aria-hidden="true"></div>
 """
 
 def nav(lang, depth, switch_href=None, switch_label=None, home_anchor_prefix=None):
@@ -93,7 +99,7 @@ def nav(lang, depth, switch_href=None, switch_label=None, home_anchor_prefix=Non
       </ul>
     </nav>
     <div class="nav-right">{sw}
-      <button class="btn btn-amber" type="button" data-open-chat>{CHAT_ICON}{u['quote']}</button>
+      <a class="btn btn-primary btn-sm" href="{WA_LINK}" target="_blank" rel="noopener">{WA_ICON}{u['quote']}</a>
     </div>
   </div>
 </header>
@@ -101,12 +107,12 @@ def nav(lang, depth, switch_href=None, switch_label=None, home_anchor_prefix=Non
 
 def footer(lang, depth):
     u = UI[lang]; r = "../" * depth
-    links = " · ".join(f'<a href="{r}services/{s["slug"]}/">{s["nav"]}</a>' for s in SERVICES)
+    links = "".join(f'<a href="{r}services/{s["slug"]}/">{s["nav"]}</a>' for s in SERVICES)
     return f"""<footer>
-  <div class="wrap" style="flex-direction:column;gap:1.2rem">
-    <nav aria-label="Services" style="font-size:.84rem;line-height:1.9">{links}</nav>
-    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem">
-      <span><b style="color:var(--text);font-family:var(--f-display);font-stretch:125%">autocode<span style="color:var(--amber)">RHX</span></b> · {u['foot1']}</span>
+  <div class="wrap">
+    <nav class="flinks" aria-label="{u['services']}">{links}</nav>
+    <div class="base">
+      <span><span class="logo">autocode<b>RHX</b></span> · {u['foot1']} · WhatsApp {WHATSAPP_DISPLAY}</span>
       <span>{u['foot2']}</span>
     </div>
   </div>
@@ -115,9 +121,7 @@ def footer(lang, depth):
 
 def chat(lang, depth):
     u = UI[lang]; r = "../" * depth
-    return f"""<button class="chat-fab" id="chatFab" type="button" aria-label="{u['contact']}">
-  <span class="ping" aria-hidden="true"></span>{CHAT_ICON}{u['contact']}
-</button>
+    return f"""<button class="chat-fab" id="chatFab" type="button" aria-label="{u['contact']}">{CHAT_ICON}{u['contact']}</button>
 <div class="chat" id="chat" role="dialog" aria-label="{u['assistant']}" hidden>
   <div class="chat-head">
     <div class="avatar" aria-hidden="true">RHX</div>
@@ -292,110 +296,137 @@ HOME["de"].update({
   "final_h2": "Bereit, wenn dein Auto es ist.", "final_p": "Sag dem Assistenten, was du brauchst. Er schreibt die WhatsApp-Nachricht für dich, damit du schneller ein Angebot bekommst.", "final_cta": "Jetzt chatten",
 })
 
+HOME["en"].update({
+  "label": "Remote vehicle programming · Worldwide",
+  "h1": "Online programming and coding for VAG, Porsche, Lamborghini and Bentley",
+  "cta1": "Get a quote on WhatsApp", "cta2": "View services",
+  "brandbox": "Brands covered", "tools": "Factory tools:",
+  "svc_h2": "Coding, programming and diagnostics",
+  "svc_p": "Sorted by type of job. Every job starts with a free check that your car and setup support it.",
+  "open": "Details", "askrow": "Ask",
+  "proc_h2": "From first message to finished job",
+  "reg_h2": "Remote sessions in your time zone",
+  "prep_h2": "What you need at the car",
+  "contact_label": "Contact", "contact_h2": "Get a fixed quote",
+  "contact_p": "Send your car, VIN and the job on WhatsApp. You get a clear answer and price, usually the same day.",
+  "contact_small": "WhatsApp", "contact_btn": "Open WhatsApp", "contact_chat": "Use the assistant",
+})
+HOME["de"].update({
+  "label": "Fahrzeugprogrammierung per Fernzugriff · Weltweit",
+  "h1": "Online-Programmierung und Codierung für VAG, Porsche, Lamborghini und Bentley",
+  "cta1": "Angebot per WhatsApp", "cta2": "Leistungen ansehen",
+  "brandbox": "Marken", "tools": "Werkstattsysteme:",
+  "svc_h2": "Codierung, Programmierung und Diagnose",
+  "svc_p": "Nach Art des Auftrags sortiert. Vor jedem Auftrag prüfe ich kostenlos, ob Auto und Setup passen.",
+  "open": "Details", "askrow": "Anfragen",
+  "proc_h2": "Von der ersten Nachricht zum fertigen Auftrag",
+  "reg_h2": "Fernsitzungen in deiner Zeitzone",
+  "prep_h2": "Was du am Auto brauchst",
+  "contact_label": "Kontakt", "contact_h2": "Festpreis anfragen",
+  "contact_p": "Schick mir Auto, FIN und Auftrag per WhatsApp. Du bekommst meist noch am selben Tag eine klare Antwort und einen Preis.",
+  "contact_small": "WhatsApp", "contact_btn": "WhatsApp öffnen", "contact_chat": "Assistent nutzen",
+})
+
 def home_page(lang):
     H = HOME[lang]; depth = 1 if lang == "de" else 0; r = "../" * depth
-    brands = ["Volkswagen", "Audi", "Lamborghini", "SEAT", "Škoda", "Cupra", "Bentley", "Porsche", "Mercedes-Benz", "McLaren", "Maserati"]
-    ex = {"Lamborghini", "Bentley", "McLaren"}
-    def brand_span(b, hidden=False):
-        cls = ' class="x"' if b in ex else ""
-        hid = ' aria-hidden="true"' if hidden else ""
-        return "<span" + cls + hid + ">" + b + "</span>"
-    marquee = "".join(brand_span(b) for b in brands) + "".join(brand_span(b, True) for b in brands)
+    brands = ["Volkswagen", "Audi", "SEAT", "Škoda", "Cupra", "Porsche", "Lamborghini", "Bentley", "Mercedes-Benz", "McLaren", "Maserati", "Other brands on request" if lang == "en" else "Weitere auf Anfrage"]
+    brand_li = "".join(f"<li>{b}</li>" for b in brands)
 
-    cats_html = ""
+    groups = ""
     for key, idx, title, desc, cards in H["cats"]:
-        cards_html = ""
+        rows = ""
         for slug, cls, tag, badge, name, text, chips in cards:
-            chat_name = name.replace("&amp;", "&")
-            link_name = f'<a href="{r}services/{slug}/">{name}</a>' if slug else name
-            more = f'<a class="more" href="{r}services/{slug}/">{H["more"]}</a>' if slug else ""
-            cards_html += f"""<article class="card {cls}">
-  <div class="tag"><span>{tag}</span>{f'<b>{badge}</b>' if badge else ''}</div>
-  <h3>{link_name}</h3>
-  <p>{text}</p>
-  <div class="foot"><div class="chips">{''.join(f'<span>{c}</span>' for c in chips)}</div><div class="acts">{more}<button class="ask" type="button" data-service="{esc(chat_name)}">{H['ask']}</button></div></div>
-</article>
-"""
-        cats_html += f"""<div class="cat" data-cat="{key}">
-  <div class="cat-side"><span class="idx">{idx}</span><h3>{title}</h3><p>{desc}</p></div>
-  <div class="cards">{cards_html}</div>
+            first_for_slug = slug and [c for c in cards if c[0] == slug][0][4] == name
+            if slug and first_for_slug:
+                rows += f'<li><a class="svc" href="{r}services/{slug}/"><div><strong>{name}</strong><span>{text}</span></div><i>{H["open"]} →</i></a></li>\n'
+            else:
+                rows += f'<li><button class="svc" type="button" data-service="{esc(name.replace("&amp;", "&"))}"><div><strong>{name}</strong><span>{text}</span></div><i>{H["askrow"]} →</i></button></li>\n'
+        groups += f"""<div class="group">
+  <div class="group-title"><h3>{title}</h3><p>{desc}</p></div>
+  <ul class="svc-list">{rows}</ul>
 </div>
 """
-    filters = "".join(f'<button type="button" aria-pressed="{"true" if k=="all" else "false"}" data-filter="{k}">{v}</button>' for k, v in H["filters"])
-    steps = "".join(f'<div class="step"><span class="n">0{i+1}</span><h3>{t}</h3><p>{p}</p></div>' for i, (t, p) in enumerate(H["steps"]))
-    regions = "".join(f'<div class="region"><span class="tz">{tz}</span><h3>{n}</h3><p>{p}</p></div>' for tz, n, p in H["regions"])
-    spec = "".join(f'<div class="spec-row" role="row"><span role="cell">{a}</span><strong class="{"a" if hi else ""}" role="cell">{b}</strong></div>' for a, b, hi in H["spec"])
-    pillars = "".join(f'<div class="pillar"><h3>{t}</h3><p>{p}</p></div>' for t, p in H["pillars"])
+    steps = "".join(f'<li><span class="n">{"Step" if lang=="en" else "Schritt"} {i+1}</span><h3>{t}</h3><p>{p}</p></li>' for i, (t, p) in enumerate(H["steps"]))
+    regions = "".join(f'<div class="region"><h3>{n}</h3><p>{p}</p></div>' for tz, n, p in H["regions"])
+    spec = "".join(f'<div class="spec-row"><span>{a}</span><strong class="{"a" if hi else ""}">{b}</strong></div>' for a, b, hi in H["spec"])
+    facts = "".join(f'<div class="fact"><h3>{t}</h3><p>{p}</p></div>' for t, p in H["pillars"])
     faq = "".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in H["faq"])
-    trust = "".join(f"<span>{t}</span>" for t in H["trust"])
 
     website = {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "url": SITE_URL + H["path"], "inLanguage": lang, "publisher": {"@id": SITE_URL + "/#org"}}
     alts = [("en", "/"), ("de", "/de/"), ("x-default", "/")]
     out = head(lang, H["title"], H["desc"], H["path"], depth, [ORG, website, faq_ld(H["faq"])], alts)
     out += nav(lang, depth, switch_href=(r if lang == "de" else "de/"), switch_label=("EN" if lang == "de" else "DE"), home_anchor_prefix="")
     out += f"""<main id="top">
-  <section class="hero">
+  <section class="hero dark">
     <div class="wrap">
       <div>
-        <span class="status"><i></i>{H['status']}</span>
+        <span class="label">{H['label']}</span>
         <h1>{H['h1']}</h1>
         <p class="lede">{H['lede']}</p>
         <div class="ctas">
-          <button class="btn btn-amber" type="button" data-open-chat>{CHAT_ICON}{H['cta1']}</button>
-          <a class="btn btn-ghost" href="#services">{H['cta2']}</a>
+          <a class="btn btn-primary" href="{WA_LINK}" target="_blank" rel="noopener">{WA_ICON}{H['cta1']}</a>
+          <a class="btn btn-line" href="#services">{H['cta2']}</a>
         </div>
-        <div class="trust">{trust}</div>
       </div>
-      <div class="console" aria-label="Example remote session">
-        <div class="console-bar"><span class="dots"><i></i><i></i><i></i></span><span>session.log · example</span><span style="color:var(--online)">● online</span></div>
-<pre id="log"><span class="ln"><span class="k">connect</span>   VAS 6154 interface ........ <span class="ok">ok</span></span><span class="ln"><span class="k">vehicle</span>   Audi A4 B9 · WAUZZZF4•••••••</span><span class="ln"><span class="k">gateway</span>   19 Diagnostic interface ... <span class="ok">online</span></span><span class="ln"><span class="k">supply</span>    battery charger ........... <span class="a">13.6 V</span></span><span class="ln"><span class="k">unit</span>      5F Information electronics</span><span class="ln"><span class="k">backend</span>   OEM server login .......... <span class="ok">granted</span></span><span class="ln"><span class="k">activate</span>  App-Connect · CarPlay ..... <span class="ok">done</span></span><span class="ln"><span class="k">verify</span>    fault memory cleared ...... <span class="ok">0 DTC</span></span></pre>
-        <div class="gauge"><span>progress</span><div class="track"><b></b></div><span class="volt" id="volt">13.6 V</span></div>
+      <div class="brandbox">
+        <h2>{H['brandbox']}</h2>
+        <ul>{brand_li}</ul>
+        <p class="tools"><b>{H['tools']}</b> ODIS · PIWIS · XENTRY · VCDS</p>
       </div>
     </div>
   </section>
 
-  <div class="brands" aria-label="{H['brands']}"><div class="wrap"><span class="eyebrow">{H['brands']}</span><div class="marquee"><div class="marquee-track">{marquee}</div></div></div></div>
+  <div class="facts"><div class="wrap">{facts}</div></div>
 
   <section class="sec" id="services">
     <div class="wrap">
-      <div class="sec-head"><div><span class="eyebrow">{H['svc_eyebrow']}</span><h2 style="margin-top:.6rem">{H['svc_h2']}</h2></div><p>{H['svc_p']}</p></div>
-      <div class="filters" role="group" aria-label="{H['svc_eyebrow']}">{filters}</div>
-      {cats_html}
+      <div class="sec-head"><span class="label">{H['svc_eyebrow']}</span><h2>{H['svc_h2']}</h2><p>{H['svc_p']}</p></div>
+      {groups}
     </div>
   </section>
 
-  <section class="sec process" id="process">
+  <section class="sec sec-alt" id="process">
     <div class="wrap">
-      <div class="sec-head"><div><span class="eyebrow">{H['proc_eyebrow']}</span><h2 style="margin-top:.6rem">{H['proc_h2']}</h2></div><p>{H['proc_p']}</p></div>
-      <div class="steps">{steps}</div>
+      <div class="sec-head"><span class="label">{H['proc_eyebrow']}</span><h2>{H['proc_h2']}</h2><p>{H['proc_p']}</p></div>
+      <ol class="steps">{steps}</ol>
     </div>
   </section>
 
-  <section class="sec" id="worldwide">
+  <section class="sec" id="prepare">
+    <div class="wrap two">
+      <div class="copy"><span class="label">{H['prep_eyebrow']}</span><h2>{H['prep_h2']}</h2><p>{H['prep_p']}</p><p>{H['prep_note']}</p></div>
+      <div class="spec">{spec}</div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt" id="worldwide">
     <div class="wrap">
-      <div class="sec-head"><div><span class="eyebrow">{H['reg_eyebrow']}</span><h2 style="margin-top:.6rem">{H['reg_h2']}</h2></div><p>{H['reg_p']}</p></div>
+      <div class="sec-head"><span class="label">{H['reg_eyebrow']}</span><h2>{H['reg_h2']}</h2><p>{H['reg_p']}</p></div>
       <div class="regions">{regions}</div>
-      <p class="mono" style="margin-top:1.5rem;color:var(--muted);font-size:.8rem;max-width:80ch">→ {H['reg_note']}</p>
+      <p class="note">{H['reg_note']}</p>
     </div>
   </section>
 
-  <section class="sec" id="prepare" style="padding-top:0">
-    <div class="wrap prep">
-      <div class="prep-copy"><span class="eyebrow">{H['prep_eyebrow']}</span><h2 style="margin-top:.6rem">{H['prep_h2']}</h2><p>{H['prep_p']}</p><p class="note">{H['prep_note']}</p></div>
-      <div class="spec" role="table" aria-label="{H['prep_eyebrow']}">{spec}</div>
-    </div>
-  </section>
-
-  <section class="sec" style="padding-top:0"><div class="wrap pillars">{pillars}</div></section>
-
-  <section class="sec" id="faq" style="padding-top:0">
+  <section class="sec" id="faq">
     <div class="wrap">
-      <div class="sec-head"><div><span class="eyebrow">FAQ</span><h2 style="margin-top:.6rem">{H['faq_h2']}</h2></div></div>
+      <div class="sec-head"><span class="label">FAQ</span><h2>{H['faq_h2']}</h2></div>
       <div class="faq">{faq}</div>
     </div>
   </section>
 
-  <section class="final"><div class="wrap"><div class="final-box"><div><h2>{H['final_h2']}</h2><p>{H['final_p']}</p></div><div class="ctas"><button class="btn btn-amber" type="button" data-open-chat>{CHAT_ICON}{H['final_cta']}</button></div></div></div></section>
+  <section class="contact dark" id="contact">
+    <div class="wrap">
+      <div><span class="label">{H['contact_label']}</span><h2>{H['contact_h2']}</h2><p>{H['contact_p']}</p></div>
+      <div class="contact-card">
+        <small>{H['contact_small']}</small>
+        <span class="num">{WHATSAPP_DISPLAY}</span>
+        <div class="row">
+          <a class="btn btn-wa" href="{WA_LINK}" target="_blank" rel="noopener">{WA_ICON}{H['contact_btn']}</a>
+          <button class="btn btn-line" type="button" data-open-chat>{CHAT_ICON}{H['contact_chat']}</button>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 """
     out += footer(lang, depth) + chat(lang, depth)
@@ -414,17 +445,17 @@ def service_page(s):
     out = head("en", s["title"], s["desc"], path, depth, [ORG, svc_ld, crumbs_ld, faq_ld(s["faq"])], [("en", path), ("x-default", path)])
     out += nav("en", depth, switch_href=r + "de/", switch_label="DE", home_anchor_prefix=r)
     faq = "".join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in s["faq"])
-    related = "".join(f'<a href="../{x}/"><strong>{SVC[x]["nav"]}</strong><span>{SVC[x]["short"]}</span></a>' for x in s["related"])
+    related = "".join(f'<li><a class="svc" href="../{x}/"><div><strong>{SVC[x]["nav"]}</strong><span>{SVC[x]["short"]}</span></div><i>Details →</i></a></li>' for x in s["related"])
     out += f"""<main>
   <section class="page-hero">
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="{r}">Home</a><span>/</span><a href="{r}#services">Services</a><span>/</span><span aria-current="page">{s['nav']}</span></nav>
-      <span class="eyebrow">{s['eyebrow']}</span>
-      <h1 style="margin-top:.8rem">{s['h1']}</h1>
+      <span class="label">{s['eyebrow']}</span>
+      <h1>{s['h1']}</h1>
       <p class="lede">{s['lede']}</p>
       <div class="ctas">
-        <button class="btn btn-amber" type="button" data-open-chat="{esc(s['chat'])}">{CHAT_ICON}Get a quote on WhatsApp</button>
-        <a class="btn btn-ghost" href="{r}#services">All services</a>
+        <a class="btn btn-primary" href="{WA_LINK}" target="_blank" rel="noopener">{WA_ICON}Get a quote on WhatsApp</a>
+        <button class="btn btn-line" type="button" data-open-chat="{esc(s['chat'])}">{CHAT_ICON}Use the assistant</button>
       </div>
     </div>
   </section>
@@ -439,14 +470,15 @@ def service_page(s):
         <h3>Get a fixed quote</h3>
         <p>Send your car, VIN and the job. You get a clear answer and price, usually the same day.</p>
         <ul><li>Free VIN compatibility check</li><li>Genuine licensed software</li><li>Remote, worldwide</li><li>English, German, Hindi</li></ul>
-        <button class="btn btn-amber" type="button" data-open-chat="{esc(s['chat'])}">{CHAT_ICON}Start chat</button>
+        <a class="btn btn-wa" href="{WA_LINK}" target="_blank" rel="noopener">{WA_ICON}WhatsApp</a>
+        <p class="num">{WHATSAPP_DISPLAY}</p>
       </div>
     </aside>
   </div>
-  <section class="sec" style="padding-top:0">
+  <section class="sec sec-alt">
     <div class="wrap">
-      <div class="sec-head"><div><span class="eyebrow">Related</span><h2 style="margin-top:.6rem;font-size:clamp(1.4rem,3vw,2rem)">Other services</h2></div></div>
-      <div class="related">{related}</div>
+      <div class="sec-head"><span class="label">Related</span><h2>Other services</h2></div>
+      <ul class="related">{related}</ul>
     </div>
   </section>
 </main>
@@ -458,7 +490,7 @@ def notfound_page():
     out = head("en", "Page not found | autocodeRHX", "This page doesn't exist. Browse remote coding and programming services from autocodeRHX.", "/404.html", 0, [])
     out = out.replace(f'<meta name="robots" content="{ROBOTS}">', '<meta name="robots" content="noindex">')
     out += nav("en", 0, home_anchor_prefix="/")
-    out += """<main><section class="notfound"><div class="wrap"><span class="eyebrow">Error 404</span><h1>Fault code: page not found.</h1><p>The page you're looking for doesn't exist. Head back to the services or ask the assistant.</p><a class="btn btn-amber" href="__BASE__">Back to home</a></div></section></main>
+    out += """<main><section class="notfound"><div class="wrap"><span class="label">Error 404</span><h1>Page not found</h1><p>The page you're looking for doesn't exist.</p><a class="btn btn-primary" href="__BASE__">Back to home</a></div></section></main>
 """
     # 404 is served from any path, so use root-absolute asset links
     out = out.replace('href="./"', 'href="__BASE__"').replace('href="favicon.svg"', 'href="__BASE__favicon.svg"').replace('href="assets/', 'href="__BASE__assets/').replace('href="/#', 'href="__BASE__#')
@@ -467,26 +499,23 @@ def notfound_page():
     return (out + tail).replace("__BASE__", BASE_PATH)
 
 # ---------------------------------------------------------------- static extras
-FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#0A1820"/><rect x="3" y="3" width="58" height="58" rx="10" fill="none" stroke="#FFB547" stroke-width="2"/><text x="32" y="41" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="22" fill="#FFB547">RHX</text></svg>"""
+FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="10" fill="#C8102E"/><text x="32" y="42" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="24" fill="#fff">RHX</text></svg>"""
 
 def make_images():
     from PIL import Image, ImageDraw, ImageFont
-    B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"; M = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+    B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"; R = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
     W, Hh = 1200, 630
-    im = Image.new("RGB", (W, Hh), "#0A1820"); d = ImageDraw.Draw(im)
-    for x in range(0, W, 56): d.line([(x, 0), (x, Hh)], fill="#12293A")
-    for y in range(0, Hh, 56): d.line([(0, y), (W, y)], fill="#12293A")
-    big = ImageFont.truetype(B, 96); mid = ImageFont.truetype(B, 40); mono = ImageFont.truetype(M, 26)
-    d.text((80, 150), "autocode", font=big, fill="#E4EDF1")
-    w = d.textlength("autocode", font=big); d.text((80 + w, 150), "RHX", font=big, fill="#FFB547")
-    d.text((80, 300), "Remote online programming", font=mid, fill="#E4EDF1")
-    d.text((80, 352), "VAG · Porsche · Lamborghini · Bentley · Mercedes", font=mid, fill="#8DA5B2")
-    d.rectangle([80, 460, 1120, 462], fill="#1E3A4A")
-    d.text((80, 490), "● online   CarPlay activation · Wiring diagrams · Licensed software", font=mono, fill="#5FD0C4")
+    im = Image.new("RGB", (W, Hh), "#16191E"); d = ImageDraw.Draw(im)
+    big = ImageFont.truetype(B, 88); mid = ImageFont.truetype(B, 40); small = ImageFont.truetype(R, 30)
+    d.rectangle([80, 140, 140, 148], fill="#C8102E")
+    d.text((80, 180), "autocode", font=big, fill="#FFFFFF")
+    w = d.textlength("autocode", font=big); d.text((80 + w, 180), "RHX", font=big, fill="#C8102E")
+    d.text((80, 320), "Remote online programming and coding", font=mid, fill="#FFFFFF")
+    d.text((80, 380), "VAG · Porsche · Lamborghini · Bentley · Mercedes-Benz", font=small, fill="#A3AAB3")
+    d.text((80, 500), "WhatsApp " + WHATSAPP_DISPLAY, font=small, fill="#E9ECEF")
     im.save(os.path.join(SRC_ASSETS, "og-image.png"), optimize=True)
-    ic = Image.new("RGB", (180, 180), "#0A1820"); d = ImageDraw.Draw(ic)
-    d.rounded_rectangle([8, 8, 172, 172], radius=26, outline="#FFB547", width=4)
-    f = ImageFont.truetype(B, 50); tw = d.textlength("RHX", font=f); d.text(((180 - tw) / 2, 58), "RHX", font=f, fill="#FFB547")
+    ic = Image.new("RGB", (180, 180), "#C8102E"); d = ImageDraw.Draw(ic)
+    f = ImageFont.truetype(B, 54); tw = d.textlength("RHX", font=f); d.text(((180 - tw) / 2, 58), "RHX", font=f, fill="#FFFFFF")
     ic.save(os.path.join(SRC_ASSETS, "apple-touch-icon.png"), optimize=True)
 
 def write(rel, content):
