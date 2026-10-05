@@ -1,0 +1,5 @@
+# Built output (GitHub Actions builds it on every push)
+site/
+__pycache__/
+*.pyc
+.DS_Store
