@@ -14,7 +14,7 @@ and the preview updates in about a minute.
 | `content_services.py` | Text of the 8 service pages. Edit here. |
 | `build.py` | Home pages (EN + DE), layout, structured data, sitemap. |
 | `assets/site.js` | Chat assistant + **your WhatsApp number** (top of file). |
-| `assets/style.css` | Design. One font family (Barlow), self-hosted in `assets/fonts/` (no Google requests). |
+| `assets/style.css` | Design. Two font families, Saira (headings, labels) and Barlow (text), self-hosted in `assets/fonts/` (no Google requests). |
 | `.github/workflows/deploy.yml` | Build and deploy on every push. |
 | `site/` | Build output, created locally with `python3 build.py` (not committed). |
 
