@@ -273,6 +273,8 @@ body{padding-top:env(safe-area-inset-top,0px)}
 .region .tz{font-family:var(--f-mono);font-size:.72rem;color:var(--amber);letter-spacing:.06em}
 .region h3{margin:.4rem 0 .5rem}
 .region p{color:var(--muted);font-size:.9rem}
+.region p a{color:var(--amber);text-decoration:none;white-space:nowrap}
+.region p a:hover{text-decoration:underline}
 
 /* service page */
 .crumbs{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.4rem}

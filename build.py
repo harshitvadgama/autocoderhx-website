@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Builds the autocodeRHX static site into ./site
+"""Builds the autocodeRHV static site into ./site
 Edit SITE_URL once you own the domain, then run:  python3 build.py
 """
 import json, os, shutil, datetime, html
 from content_services import SERVICES
+from content_regions import REGIONS
 
-# Preview on GitHub Pages. When you own the domain, set SITE_URL to it (e.g. "https://www.autocoderhx.com")
-# and set CUSTOM_DOMAIN = True. No trailing slash.
-SITE_URL = os.environ.get("SITE_URL", "https://harshitvadgama.github.io/autocoderhx-website")
-CUSTOM_DOMAIN = os.environ.get("CUSTOM_DOMAIN", "0") == "1"
+# Live domain. For a hidden preview build use: SITE_URL=https://harshitvadgama.github.io/autocoderhx-website CUSTOM_DOMAIN=0
+SITE_URL = os.environ.get("SITE_URL", "https://www.autocoderhv.com")
+CUSTOM_DOMAIN = os.environ.get("CUSTOM_DOMAIN", "1") == "1"
 BASE_PATH = "/" + SITE_URL.split("//", 1)[1].partition("/")[2]
 BASE_PATH = BASE_PATH.rstrip("/") + "/"   # "/" on a custom domain, "/autocoderhx-website/" on github.io
-BRAND = "autocodeRHX"
+BRAND = "autocodeRHV"
 TODAY = datetime.date.today().isoformat()
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "site")
 SRC_ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
@@ -20,6 +20,9 @@ SVC = {s["slug"]: s for s in SERVICES}
 AREAS = ["Europe", "United Kingdom", "Ireland", "Middle East", "North America", "India", "Asia-Pacific", "Australia", "New Zealand", "South Africa"]
 
 def esc(s): return html.escape(s, quote=True)
+
+# Language/country versions of the home page (hreflang cluster)
+HOME_ALTS = [("en", "/"), ("de", "/de/")] + [(r["hreflang"], f"/{r['code']}/") for r in REGIONS] + [("x-default", "/")]
 
 # The github.io preview is kept out of Google so it never competes with the real domain.
 ROBOTS = "index, follow, max-image-preview:large" if CUSTOM_DOMAIN else "noindex, nofollow"
@@ -37,18 +40,19 @@ LOGO_MARK = ('<svg class="mark" viewBox="0 0 64 56" aria-hidden="true">'
              f'<g fill="currentColor">{_pins()}</g></svg>')
 
 # ---------------------------------------------------------------- shared parts
+WHATSAPP_DISPLAY = "+91 94288 53797"   # also set in assets/site.js
 CHAT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12Z"/></svg>'
 
 UI = {
  "en": {"services": "Services", "how": "How it works", "regions": "Worldwide", "faq": "FAQ", "quote": "Get a quote",
-        "contact": "Contact me", "home": "Home", "assistant": "autocodeRHX assistant", "replies": "● replies on WhatsApp",
+        "contact": "Contact me", "home": "Home", "assistant": "autocodeRHV assistant", "replies": "● replies on WhatsApp",
         "type": "Type a message…", "send": "Send", "restart": "Start over", "close": "Close chat",
-        "foot1": "Remote coding, programming &amp; diagnostics", "foot2": "Brand names are used only to describe compatibility. autocodeRHX is not affiliated with any manufacturer.",
+        "foot1": "Remote coding, programming &amp; diagnostics", "foot2": "Brand names are used only to describe compatibility. autocodeRHV is not affiliated with any manufacturer.",
         "allsvc": "All services"},
  "de": {"services": "Leistungen", "how": "Ablauf", "regions": "Weltweit", "faq": "FAQ", "quote": "Angebot anfragen",
-        "contact": "Kontakt", "home": "Start", "assistant": "autocodeRHX-Assistent", "replies": "● antwortet per WhatsApp",
+        "contact": "Kontakt", "home": "Start", "assistant": "autocodeRHV-Assistent", "replies": "● antwortet per WhatsApp",
         "type": "Nachricht schreiben…", "send": "Senden", "restart": "Neu starten", "close": "Chat schließen",
-        "foot1": "Codierung, Programmierung &amp; Diagnose aus der Ferne", "foot2": "Markennamen dienen nur zur Beschreibung der Kompatibilität. autocodeRHX steht in keiner Verbindung zu den Herstellern.",
+        "foot1": "Codierung, Programmierung &amp; Diagnose aus der Ferne", "foot2": "Markennamen dienen nur zur Beschreibung der Kompatibilität. autocodeRHV steht in keiner Verbindung zu den Herstellern.",
         "allsvc": "Alle Leistungen"},
 }
 
@@ -95,7 +99,7 @@ def nav(lang, depth, switch_href=None, switch_label=None, home_anchor_prefix=Non
     sw = f'<a class="lang" href="{switch_href}" hreflang="{"en" if lang=="de" else "de"}">{switch_label}</a>' if switch_href else ""
     return f"""<header class="nav">
   <div class="wrap">
-    <a class="logo" href="{home or './'}" aria-label="{BRAND} home">{LOGO_MARK}<span>autocode<b>RHX</b></span></a>
+    <a class="logo" href="{home or './'}" aria-label="{BRAND} home">{LOGO_MARK}<span>autocode<b>RHV</b></span></a>
     <nav aria-label="Main">
       <ul>
         <li><a href="{pre}#services">{u['services']}</a></li>
@@ -114,11 +118,13 @@ def nav(lang, depth, switch_href=None, switch_label=None, home_anchor_prefix=Non
 def footer(lang, depth):
     u = UI[lang]; r = "../" * depth
     links = " · ".join(f'<a href="{r}services/{s["slug"]}/">{s["nav"]}</a>' for s in SERVICES)
+    countries = " · ".join(f'<a href="{r}{g["code"]}/" hreflang="{g["hreflang"]}">{g["country"]}</a>' for g in REGIONS)
     return f"""<footer>
   <div class="wrap" style="flex-direction:column;gap:1.2rem">
     <nav aria-label="Services" style="font-size:.84rem;line-height:1.9">{links}</nav>
+    <nav aria-label="Countries" style="font-size:.84rem;line-height:1.9">{countries}</nav>
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem">
-      <span><b style="color:var(--text);font-family:var(--f-display);font-stretch:115%">autocode<span style="color:var(--amber)">RHX</span></b> · {u['foot1']}</span>
+      <span><b style="color:var(--text);font-family:var(--f-display);font-stretch:115%">autocode<span style="color:var(--amber)">RHV</span></b> · {u['foot1']}</span>
       <span>{u['foot2']}</span>
     </div>
   </div>
@@ -132,7 +138,7 @@ def chat(lang, depth):
 </button>
 <div class="chat" id="chat" role="dialog" aria-label="{u['assistant']}" hidden>
   <div class="chat-head">
-    <div class="avatar" aria-hidden="true">RHX</div>
+    <div class="avatar" aria-hidden="true">RHV</div>
     <div class="who"><strong>{u['assistant']}</strong><small>{u['replies']}</small></div>
     <button class="icon-btn" id="chatReset" type="button" aria-label="{u['restart']}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
     <button class="icon-btn" id="chatClose" type="button" aria-label="{u['close']}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
@@ -154,8 +160,11 @@ ORG = {
   "name": BRAND, "url": SITE_URL + "/", "logo": SITE_URL + "/assets/apple-touch-icon.png",
   "image": SITE_URL + "/assets/og-image.png",
   "description": "Remote online programming, coding and diagnostics for Volkswagen Group, Mercedes-Benz, BMW, Porsche, Lamborghini and Bentley vehicles.",
-  "areaServed": [{"@type": "Place", "name": a} for a in AREAS],
+  "areaServed": [{"@type": "Country", "name": r["country"]} for r in REGIONS] + [{"@type": "Place", "name": a} for a in AREAS],
   "knowsLanguage": ["en", "de", "hi"],
+  "telephone": "+91 94288 53797",
+  "contactPoint": {"@type": "ContactPoint", "contactType": "customer service", "telephone": "+91 94288 53797",
+                   "availableLanguage": ["English", "German", "Hindi"], "areaServed": [r["iso"] for r in REGIONS]},
   "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Services", "itemListElement": [
       {"@type": "Offer", "itemOffered": {"@type": "Service", "name": s["nav"], "url": f"{SITE_URL}/services/{s['slug']}/"}} for s in SERVICES]},
 }
@@ -166,11 +175,11 @@ def faq_ld(pairs):
 # ---------------------------------------------------------------- home page content
 HOME = {
  "en": {
-  "path": "/", "title": "VAG, Lamborghini & Bentley Online Programming | autocodeRHX",
+  "path": "/", "title": "Remote Car Coding: VAG, Mercedes, BMW & Exotics | autocodeRHV",
   "desc": "Remote coding and online programming for VW, Audi, Mercedes, BMW, Porsche, Lamborghini and Bentley. AMG menu, CarPlay, Component Protection, wiring diagrams.",
   "status": "Remote sessions available worldwide",
   "h1": 'Online programming for <em>VAG, Porsche, Lamborghini</em> and Bentley.',
-  "lede": "autocodeRHX connects to your car remotely and runs the coding, programming and activations that normally need a dealer. Genuine OEM software, done by an automotive engineer.",
+  "lede": "autocodeRHV connects to your car remotely and runs the coding, programming and activations that normally need a dealer. Genuine OEM software, done by an automotive engineer.",
   "cta1": "Start on WhatsApp", "cta2": "See all services",
   "trust": ["Licensed software only", "ODIS · PIWIS · XENTRY · ISTA · VCDS", "Quote before any work"],
   "brands": "Brands covered",
@@ -221,10 +230,10 @@ HOME = {
   "reg_eyebrow": "Worldwide", "reg_h2": "Remote coding, wherever your car is.",
   "reg_p": "Sessions are booked in your local time. The car stays with you; only the data travels.",
   "regions": [("CET / CEST", "Europe", "Germany, Austria, Switzerland, Netherlands, Belgium, France, Italy, Spain, Poland and Scandinavia."),
-              ("GMT / BST", "UK &amp; Ireland", "Online programming and coding for UK and Irish cars, including right-hand-drive market software."),
+              ("GMT / BST", "UK &amp; Ireland", "Online programming and coding for UK and Irish cars, including right-hand-drive software and UK-import km/h conversions. <a href='{R}uk/'>UK →</a> · <a href='{R}ie/'>Ireland →</a>"),
               ("GST / AST", "Middle East", "UAE, Saudi Arabia, Qatar, Kuwait, Oman and Bahrain. GCC-market Lamborghini, Bentley and Porsche welcome."),
-              ("ET / CT / PT", "North America", "USA and Canada. European evenings line up with US mornings and afternoons."),
-              ("IST / SGT", "India &amp; Asia-Pacific", "India, Singapore, Malaysia, Hong Kong and more. Sessions in English or Hindi."),
+              ("ET / CT / PT", "North America", "USA and Canada, including DRL and km/h coding for US cars imported into Canada. <a href='{R}us/'>USA →</a> · <a href='{R}ca/'>Canada →</a>"),
+              ("IST / SGT", "India &amp; Asia-Pacific", "India, Singapore, Malaysia, Hong Kong and more. Sessions in English or Hindi. <a href='{R}in/'>India →</a>"),
               ("AEST / SAST", "Australia, NZ &amp; Africa", "Australia, New Zealand and South Africa, with early-morning European slots.")],
   "reg_note": "Cars built for the EU, UK, North America, the Gulf and Asia run different software versions. Send your VIN and I'll check what applies to yours.",
   "prep_eyebrow": "Before your session", "prep_h2": "A stable setup is half the job.",
@@ -235,7 +244,7 @@ HOME = {
               ("Engineer, not a reseller", "Automotive engineering background and hands-on dealer diagnostics. I understand why a job fails, not just which button to press."),
               ("Clear price up front", "You get a quote before anything starts. If a job turns out not to be possible on your car, you don't pay for it.")],
   "faq_h2": "Common questions",
-  "faq": [("Is the software really legal?", "Yes. autocodeRHX only works with officially licensed OEM and professional software. Cracked tools are unreliable and can damage control units, so they are never used or sold here."),
+  "faq": [("Is the software really legal?", "Yes. autocodeRHV only works with officially licensed OEM and professional software. Cracked tools are unreliable and can damage control units, so they are never used or sold here."),
           ("Where do you work? Do I need to bring the car?", "Most jobs are fully remote, so the car stays with you. You need a laptop, an interface and an internet connection near the car. Sessions run worldwide."),
           ("Can you program cars from the US, UK or Middle East?", "Yes, in most cases. Software differs by market, so I check your VIN before quoting."),
           ("How do I know CarPlay will work on my car?", "Send your VIN first. I check the head unit hardware and software version and confirm before you pay anything."),
@@ -250,11 +259,11 @@ HOME = {
 # German home: same structure, natural German
 HOME["de"] = dict(HOME["en"])
 HOME["de"].update({
-  "path": "/de/", "title": "Online-Programmierung & Codierung per Fernzugriff | autocodeRHX",
+  "path": "/de/", "title": "Online-Programmierung & Codierung per Fernzugriff | autocodeRHV",
   "desc": "Online-Programmierung per Fernzugriff für VW, Audi, Porsche, Lamborghini, Bentley und Mercedes. CarPlay-Freischaltung, Stromlaufpläne, Original-Software.",
   "status": "Fernsitzungen weltweit verfügbar",
   "h1": 'Online-Programmierung für <em>VAG, Porsche, Lamborghini</em> und Bentley.',
-  "lede": "autocodeRHX verbindet sich per Fernzugriff mit deinem Auto und erledigt Codierungen, Programmierungen und Freischaltungen, für die man sonst zum Händler muss. Mit Original-Software, durchgeführt von einem Fahrzeugtechnik-Ingenieur.",
+  "lede": "autocodeRHV verbindet sich per Fernzugriff mit deinem Auto und erledigt Codierungen, Programmierungen und Freischaltungen, für die man sonst zum Händler muss. Mit Original-Software, durchgeführt von einem Fahrzeugtechnik-Ingenieur.",
   "cta1": "Per WhatsApp starten", "cta2": "Alle Leistungen",
   "trust": ["Nur lizenzierte Software", "ODIS · PIWIS · XENTRY · ISTA · VCDS", "Festpreis vor Arbeitsbeginn"],
   "brands": "Marken",
@@ -305,10 +314,10 @@ HOME["de"].update({
   "reg_eyebrow": "Weltweit", "reg_h2": "Codierung aus der Ferne, egal wo dein Auto steht.",
   "reg_p": "Termine richten sich nach deiner Ortszeit. Das Auto bleibt bei dir, nur die Daten reisen.",
   "regions": [("MEZ / MESZ", "Europa", "Deutschland, Österreich, Schweiz, Niederlande, Belgien, Frankreich, Italien, Spanien, Polen und Skandinavien."),
-              ("GMT / BST", "UK &amp; Irland", "Online-Programmierung und Codierung für britische und irische Fahrzeuge, auch mit Rechtslenker-Software."),
+              ("GMT / BST", "UK &amp; Irland", "Online-Programmierung und Codierung für britische und irische Fahrzeuge, auch mit Rechtslenker-Software. <a href='{R}uk/'>UK →</a> · <a href='{R}ie/'>Irland →</a>"),
               ("GST / AST", "Naher Osten", "VAE, Saudi-Arabien, Katar, Kuwait, Oman und Bahrain. Lamborghini, Bentley und Porsche mit GCC-Ausführung willkommen."),
-              ("ET / CT / PT", "Nordamerika", "USA und Kanada. Europäische Abende passen zu amerikanischen Vor- und Nachmittagen."),
-              ("IST / SGT", "Indien &amp; Asien-Pazifik", "Indien, Singapur, Malaysia, Hongkong und mehr. Sitzungen auf Englisch oder Hindi."),
+              ("ET / CT / PT", "Nordamerika", "USA und Kanada. Europäische Abende passen zu amerikanischen Vor- und Nachmittagen. <a href='{R}us/'>USA →</a> · <a href='{R}ca/'>Kanada →</a>"),
+              ("IST / SGT", "Indien &amp; Asien-Pazifik", "Indien, Singapur, Malaysia, Hongkong und mehr. Sitzungen auf Englisch oder Hindi. <a href='{R}in/'>Indien →</a>"),
               ("AEST / SAST", "Australien, NZ &amp; Afrika", "Australien, Neuseeland und Südafrika, mit Terminen am frühen europäischen Morgen.")],
   "reg_note": "Fahrzeuge für EU, UK, Nordamerika, Golfstaaten und Asien haben unterschiedliche Softwarestände. Schick mir deine FIN und ich prüfe, was für dein Auto gilt.",
   "prep_eyebrow": "Vor der Sitzung", "prep_h2": "Ein stabiles Setup ist die halbe Miete.",
@@ -319,7 +328,7 @@ HOME["de"].update({
               ("Ingenieur, kein Wiederverkäufer", "Studium der Fahrzeugtechnik und Praxis in der Händlerdiagnose. Ich verstehe, warum ein Job scheitert, nicht nur, welchen Knopf man drückt."),
               ("Klarer Preis vorab", "Du bekommst ein Angebot, bevor es losgeht. Geht der Auftrag bei deinem Auto nicht, zahlst du nichts.")],
   "faq_h2": "Häufige Fragen",
-  "faq": [("Ist die Software wirklich legal?", "Ja. autocodeRHX arbeitet nur mit offiziell lizenzierter OEM- und Profisoftware. Gecrackte Tools sind unzuverlässig und können Steuergeräte beschädigen, deshalb werden sie hier weder genutzt noch verkauft."),
+  "faq": [("Ist die Software wirklich legal?", "Ja. autocodeRHV arbeitet nur mit offiziell lizenzierter OEM- und Profisoftware. Gecrackte Tools sind unzuverlässig und können Steuergeräte beschädigen, deshalb werden sie hier weder genutzt noch verkauft."),
           ("Muss ich mit dem Auto vorbeikommen?", "Nein. Die meisten Aufträge laufen komplett per Fernzugriff. Du brauchst einen Laptop, ein Interface und Internet am Auto. Weltweit."),
           ("Geht das auch mit Autos aus den USA, UK oder dem Nahen Osten?", "In den meisten Fällen ja. Die Software unterscheidet sich je nach Markt, deshalb prüfe ich vorher deine FIN."),
           ("Woher weiß ich, ob CarPlay bei mir funktioniert?", "Schick zuerst deine FIN. Ich prüfe Hardware und Softwarestand deines Infotainments, bevor du etwas zahlst."),
@@ -361,14 +370,14 @@ def home_page(lang):
 """
     filters = "".join(f'<button type="button" aria-pressed="{"true" if k=="all" else "false"}" data-filter="{k}">{v}</button>' for k, v in H["filters"])
     steps = "".join(f'<div class="step"><span class="n">0{i+1}</span><h3>{t}</h3><p>{p}</p></div>' for i, (t, p) in enumerate(H["steps"]))
-    regions = "".join(f'<div class="region"><span class="tz">{tz}</span><h3>{n}</h3><p>{p}</p></div>' for tz, n, p in H["regions"])
+    regions = "".join(f'<div class="region"><span class="tz">{tz}</span><h3>{n}</h3><p>{p.replace("{R}", r)}</p></div>' for tz, n, p in H["regions"])
     spec = "".join(f'<div class="spec-row" role="row"><span role="cell">{a}</span><strong class="{"a" if hi else ""}" role="cell">{b}</strong></div>' for a, b, hi in H["spec"])
     pillars = "".join(f'<div class="pillar"><h3>{t}</h3><p>{p}</p></div>' for t, p in H["pillars"])
     faq = "".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in H["faq"])
     trust = "".join(f"<span>{t}</span>" for t in H["trust"])
 
     website = {"@context": "https://schema.org", "@type": "WebSite", "name": BRAND, "url": SITE_URL + H["path"], "inLanguage": lang, "publisher": {"@id": SITE_URL + "/#org"}}
-    alts = [("en", "/"), ("de", "/de/"), ("x-default", "/")]
+    alts = HOME_ALTS
     out = head(lang, H["title"], H["desc"], H["path"], depth, [ORG, website, faq_ld(H["faq"])], alts)
     out += nav(lang, depth, switch_href=(r if lang == "de" else "de/"), switch_label=("EN" if lang == "de" else "DE"), home_anchor_prefix="")
     out += f"""<main id="top">
@@ -492,8 +501,65 @@ def service_page(s):
     out += footer("en", depth) + chat("en", depth)
     return out
 
+def region_page(g):
+    depth = 1; r = "../"; path = f"/{g['code']}/"
+    svc_ld = {"@context": "https://schema.org", "@type": "Service", "name": g["h1"], "serviceType": "Vehicle coding and online programming",
+              "description": g["desc"], "url": SITE_URL + path, "provider": {"@id": SITE_URL + "/#org"},
+              "areaServed": {"@type": "Country", "name": g["country"]},
+              "availableChannel": {"@type": "ServiceChannel", "serviceUrl": SITE_URL + path, "name": "Remote session"}}
+    crumbs_ld = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
+        {"@type": "ListItem", "position": 2, "name": g["country"], "item": SITE_URL + path}]}
+    out = head("en", g["title"], g["desc"], path, depth, [ORG, svc_ld, crumbs_ld, faq_ld(g["faq"])], HOME_ALTS)
+    out = out.replace('<meta property="og:locale" content="en_US">', f'<meta property="og:locale" content="{g["hreflang"].replace("-", "_")}">')
+    out += nav("en", depth, switch_href=r + "de/", switch_label="DE", home_anchor_prefix=r)
+    faq = "".join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in g["faq"])
+    others = "".join(f'<a href="../{x["code"]}/" hreflang="{x["hreflang"]}"><strong>{x["country"]}</strong><span>{x["eyebrow"]}</span></a>' for x in REGIONS if x is not g)
+    svc_links = "".join(f'<li><a href="{r}services/{s["slug"]}/">{s["nav"]}</a></li>' for s in SERVICES)
+    out += f"""<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="{r}">Home</a><span>/</span><span aria-current="page">{g['country']}</span></nav>
+      <span class="eyebrow">{g['eyebrow']}</span>
+      <h1 style="margin-top:.8rem">{g['h1']}</h1>
+      <p class="lede">{g['lede']}</p>
+      <div class="ctas">
+        <button class="btn btn-amber" type="button" data-open-chat>{CHAT_ICON}Get a quote on WhatsApp</button>
+        <a class="btn btn-ghost" href="{r}#services">All services</a>
+      </div>
+    </div>
+  </section>
+  <div class="wrap article">
+    <article class="prose">
+{g['body']}
+      <h2>All services available in {g['country']}</h2>
+      <ul>{svc_links}</ul>
+      <h2>Frequently asked questions</h2>
+      <div class="faq">{faq}</div>
+    </article>
+    <aside class="aside">
+      <div class="aside-box">
+        <h3>Get a fixed quote</h3>
+        <p>Send your car, VIN and the job on WhatsApp. You get a clear answer and price, usually the same day.</p>
+        <ul><li>Free VIN compatibility check</li><li>Genuine licensed software</li><li>Sessions booked in {g['tz']}</li><li>English, German, Hindi</li></ul>
+        <button class="btn btn-amber" type="button" data-open-chat>{CHAT_ICON}Start chat</button>
+        <p class="mono" style="font-size:.85rem">WhatsApp {WHATSAPP_DISPLAY}</p>
+      </div>
+    </aside>
+  </div>
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="eyebrow">Worldwide</span><h2 style="margin-top:.6rem;font-size:clamp(1.4rem,3vw,2rem)">Other countries</h2></div></div>
+      <div class="related">{others}</div>
+    </div>
+  </section>
+</main>
+"""
+    out += footer("en", depth) + chat("en", depth)
+    return out
+
 def notfound_page():
-    out = head("en", "Page not found | autocodeRHX", "This page doesn't exist. Browse remote coding and programming services from autocodeRHX.", "/404.html", 0, [])
+    out = head("en", "Page not found | autocodeRHV", "This page doesn't exist. Browse remote coding and programming services from autocodeRHV.", "/404.html", 0, [])
     out = out.replace(f'<meta name="robots" content="{ROBOTS}">', '<meta name="robots" content="noindex">')
     out += nav("en", 0, home_anchor_prefix="/")
     out += """<main><section class="notfound"><div class="wrap"><span class="eyebrow">Error 404</span><h1>Fault code: page not found.</h1><p>The page you're looking for doesn't exist. Head back to the services or ask the assistant.</p><a class="btn btn-amber" href="__BASE__">Back to home</a></div></section></main>
@@ -534,14 +600,14 @@ def make_images():
     socket(d, 80, 120, 150)
     big = ImageFont.truetype(B, 88); mid = ImageFont.truetype(B, 38); small = ImageFont.truetype(R, 28)
     d.text((260, 150), "autocode", font=big, fill=TXT)
-    w = d.textlength("autocode", font=big); d.text((260 + w, 150), "RHX", font=big, fill=AMB)
+    w = d.textlength("autocode", font=big); d.text((260 + w, 150), "RHV", font=big, fill=AMB)
     d.text((80, 330), "Remote coding and online programming", font=mid, fill=TXT)
     d.text((80, 385), "VAG · Mercedes-Benz · BMW · Porsche · Lamborghini · Bentley", font=small, fill=MUT)
     d.text((80, 500), "WhatsApp +91 94288 53797", font=small, fill=AMB)
     im.save(os.path.join(SRC_ASSETS, "og-image.png"), optimize=True)
 
     ic = Image.new("RGB", (180, 180), GND); d = ImageDraw.Draw(ic)
-    socket(d, 14, 26, 152, letters="RHX", font=ImageFont.truetype(B, 40))
+    socket(d, 14, 26, 152, letters="RHV", font=ImageFont.truetype(B, 40))
     ic.save(os.path.join(SRC_ASSETS, "apple-touch-icon.png"), optimize=True)
 
 def write(rel, content):
@@ -558,10 +624,11 @@ def main():
     write("index.html", home_page("en"))
     write("de/index.html", home_page("de"))
     for s in SERVICES: write(f"services/{s['slug']}/index.html", service_page(s))
+    for g in REGIONS: write(f"{g['code']}/index.html", region_page(g))
     write("404.html", notfound_page())
     write("favicon.svg", FAVICON)
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")
-    urls = [("/", "1.0", [("en", "/"), ("de", "/de/"), ("x-default", "/")]), ("/de/", "0.9", [("en", "/"), ("de", "/de/"), ("x-default", "/")])]
+    urls = [("/", "1.0", HOME_ALTS), ("/de/", "0.9", HOME_ALTS)] + [(f"/{g['code']}/", "0.9", HOME_ALTS) for g in REGIONS]
     urls += [(f"/services/{s['slug']}/", "0.8", None) for s in SERVICES]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
     for u, pr, alts in urls:

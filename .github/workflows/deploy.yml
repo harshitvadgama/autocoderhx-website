@@ -26,8 +26,8 @@ jobs:
         env:
           # Set these as repository variables when the real domain is ready:
           # Settings > Secrets and variables > Actions > Variables
-          SITE_URL: ${{ vars.SITE_URL || 'https://harshitvadgama.github.io/autocoderhx-website' }}
-          CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN || '0' }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://www.autocoderhv.com' }}
+          CUSTOM_DOMAIN: ${{ vars.CUSTOM_DOMAIN || '1' }}
         run: python3 build.py
       - uses: actions/upload-pages-artifact@v3
         with:

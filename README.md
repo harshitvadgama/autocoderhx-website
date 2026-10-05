@@ -1,7 +1,8 @@
-# autocodeRHX website + SEO plan
+# autocodeRHV website + SEO plan
 
-**Preview:** https://harshitvadgama.github.io/autocoderhx-website/
-(kept out of Google on purpose until the real domain is live)
+**Live site:** https://www.autocoderhv.com (once DNS is connected, see below)
+
+Country pages: `/in/` India · `/ie/` Ireland · `/uk/` UK · `/us/` USA · `/ca/` Canada (edit in `content_regions.py`)
 
 ## How this repo works
 
@@ -95,3 +96,18 @@ Once a month in Search Console: look at queries where you rank 8–20, and impro
 - Schema.org: ProfessionalService, Service, BreadcrumbList, FAQPage
 - Open Graph share image for WhatsApp, Facebook and LinkedIn previews
 - Internal links between related services and in the footer
+
+## Connecting autocoderhv.com (GoDaddy)
+
+In GoDaddy → My Products → autocoderhv.com → DNS:
+
+| Type | Name | Value |
+|---|---|---|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | harshitvadgama.github.io |
+
+Delete GoDaddy's default `A @ Parked` record and replace the existing `CNAME www → @`.
+Then in GitHub: Settings → Pages → Custom domain → `www.autocoderhv.com` → Save. When the DNS check is green, tick **Enforce HTTPS**.

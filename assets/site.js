@@ -1,5 +1,5 @@
 /* =====================================================================
-   autocodeRHX site script
+   autocodeRHV site script
    CONFIG: put your WhatsApp number here (digits only, with country code)
    ===================================================================== */
 const WHATSAPP_NUMBER = "919428853797";
@@ -8,7 +8,7 @@ const WHATSAPP_DISPLAY = "+91 94288 53797";
 const LANG = (document.documentElement.lang || "en").slice(0, 2);
 const T = {
   en: {
-    hello: "Hi! I'm the autocodeRHX assistant. What can I help you with today?",
+    hello: "Hi! I'm the autocodeRHV assistant. What can I help you with today?",
     asking: s => "Hi! You're asking about " + s + ". Let's get you a quote.",
     other: "No problem. Describe what you need in a few words.",
     car: "Which car is it? Brand, model and year, e.g. \"Audi A4 2019\".",
@@ -21,11 +21,11 @@ const T = {
     wa: "Continue on WhatsApp", copy: "Copy message", copied: "Copied", selected: "Selected, press copy",
     addNote: "Add a note", restart: "Start over", noteAsk: "Sure, type your note and I'll add it to the message.",
     again: "Want to start a new request?", somethingElse: "Something else",
-    msg: s => "Hi autocodeRHX" + (s.name ? ", I'm " + s.name : "") + ".\nService: " + s.service + "\nCar: " + (s.car || "-") + "\nVIN: " + (s.vin || "will send later") + (s.notes ? "\nNote: " + s.notes : ""),
+    msg: s => "Hi autocodeRHV" + (s.name ? ", I'm " + s.name : "") + ".\nService: " + s.service + "\nCar: " + (s.car || "-") + "\nVIN: " + (s.vin || "will send later") + (s.notes ? "\nNote: " + s.notes : ""),
     services: ["VAG Online Programming", "Component Protection / SVM", "Mercedes AMG Menu / PIN / Coding", "BMW Coding & Programming", "Lamborghini Online Programming", "Bentley Online Programming", "CarPlay / Android Auto Activation", "Diagnostic Software License", "Wiring Diagrams", "Remote Diagnostics"]
   },
   de: {
-    hello: "Hallo! Ich bin der autocodeRHX-Assistent. Wobei kann ich helfen?",
+    hello: "Hallo! Ich bin der autocodeRHV-Assistent. Wobei kann ich helfen?",
     asking: s => "Hallo! Es geht um " + s + ". Dann machen wir dir schnell ein Angebot.",
     other: "Kein Problem. Beschreib kurz, was du brauchst.",
     car: "Um welches Auto geht es? Marke, Modell und Baujahr, z. B. \"Audi A4 2019\".",
@@ -38,7 +38,7 @@ const T = {
     wa: "Weiter zu WhatsApp", copy: "Nachricht kopieren", copied: "Kopiert", selected: "Markiert, jetzt kopieren",
     addNote: "Notiz hinzufügen", restart: "Neu starten", noteAsk: "Klar, schreib deine Notiz und ich hänge sie an.",
     again: "Neue Anfrage starten?", somethingElse: "Etwas anderes",
-    msg: s => "Hallo autocodeRHX" + (s.name ? ", ich bin " + s.name : "") + ".\nLeistung: " + s.service + "\nAuto: " + (s.car || "-") + "\nFIN: " + (s.vin || "schicke ich noch") + (s.notes ? "\nNotiz: " + s.notes : ""),
+    msg: s => "Hallo autocodeRHV" + (s.name ? ", ich bin " + s.name : "") + ".\nLeistung: " + s.service + "\nAuto: " + (s.car || "-") + "\nFIN: " + (s.vin || "schicke ich noch") + (s.notes ? "\nNotiz: " + s.notes : ""),
     services: ["VAG Online-Programmierung", "Komponentenschutz / SVM", "Mercedes AMG-Menü / PIN / Codierung", "BMW Codierung & Programmierung", "Lamborghini Online-Programmierung", "Bentley Online-Programmierung", "CarPlay / Android Auto Freischaltung", "Diagnose-Softwarelizenz", "Stromlaufpläne", "Ferndiagnose"]
   }
 };
