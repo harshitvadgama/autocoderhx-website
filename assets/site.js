@@ -22,7 +22,7 @@ const T = {
     addNote: "Add a note", restart: "Start over", noteAsk: "Sure, type your note and I'll add it to the message.",
     again: "Want to start a new request?", somethingElse: "Something else",
     msg: s => "Hi autocodeRHX" + (s.name ? ", I'm " + s.name : "") + ".\nService: " + s.service + "\nCar: " + (s.car || "-") + "\nVIN: " + (s.vin || "will send later") + (s.notes ? "\nNote: " + s.notes : ""),
-    services: ["VAG Online Programming", "Lamborghini Online Programming", "Bentley Online Programming", "CarPlay / Android Auto Activation", "Diagnostic Software License", "Wiring Diagrams", "Remote Diagnostics"]
+    services: ["VAG Online Programming", "Component Protection / SVM", "Mercedes AMG Menu / PIN / Coding", "BMW Coding & Programming", "Lamborghini Online Programming", "Bentley Online Programming", "CarPlay / Android Auto Activation", "Diagnostic Software License", "Wiring Diagrams", "Remote Diagnostics"]
   },
   de: {
     hello: "Hallo! Ich bin der autocodeRHX-Assistent. Wobei kann ich helfen?",
@@ -39,7 +39,7 @@ const T = {
     addNote: "Notiz hinzufügen", restart: "Neu starten", noteAsk: "Klar, schreib deine Notiz und ich hänge sie an.",
     again: "Neue Anfrage starten?", somethingElse: "Etwas anderes",
     msg: s => "Hallo autocodeRHX" + (s.name ? ", ich bin " + s.name : "") + ".\nLeistung: " + s.service + "\nAuto: " + (s.car || "-") + "\nFIN: " + (s.vin || "schicke ich noch") + (s.notes ? "\nNotiz: " + s.notes : ""),
-    services: ["VAG Online-Programmierung", "Lamborghini Online-Programmierung", "Bentley Online-Programmierung", "CarPlay / Android Auto Freischaltung", "Diagnose-Softwarelizenz", "Stromlaufpläne", "Ferndiagnose"]
+    services: ["VAG Online-Programmierung", "Komponentenschutz / SVM", "Mercedes AMG-Menü / PIN / Codierung", "BMW Codierung & Programmierung", "Lamborghini Online-Programmierung", "Bentley Online-Programmierung", "CarPlay / Android Auto Freischaltung", "Diagnose-Softwarelizenz", "Stromlaufpläne", "Ferndiagnose"]
   }
 };
 const L = T[LANG] || T.en;
@@ -72,7 +72,7 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const fab = document.getElementById("chatFab"), box = document.getElementById("chat"), log = document.getElementById("chatLog");
   const form = document.getElementById("chatForm"), input = document.getElementById("chatText");
   if (!fab || !box) return;
-  const BRANDS = ["Volkswagen", "Audi", "Porsche", "Lamborghini", "Bentley", "Mercedes-Benz"];
+  const BRANDS = ["Volkswagen", "Audi", "Mercedes-Benz", "BMW", "Porsche", "Lamborghini", "Bentley"];
   let state, started = false;
 
   function reset() { state = { step: "service", service: "", car: "", vin: "", name: "", notes: "" }; log.innerHTML = ""; started = false; }

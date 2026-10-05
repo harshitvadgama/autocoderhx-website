@@ -24,6 +24,18 @@ def esc(s): return html.escape(s, quote=True)
 # The github.io preview is kept out of Google so it never competes with the real domain.
 ROBOTS = "index, follow, max-image-preview:large" if CUSTOM_DOMAIN else "noindex, nofollow"
 
+# ---------------------------------------------------------------- logo
+# Mark: an OBD-II diagnostic socket seen head-on (trapezoid + 2 rows of 8 pins).
+def _pins(r=1.9, op=1):
+    d = ""
+    for i in range(8):
+        d += f'<circle cx="{14 + i*5.15:.2f}" cy="20" r="{r}"/>'
+        d += f'<circle cx="{16.6 + i*4.4:.2f}" cy="36" r="{r}"/>'
+    return d
+LOGO_MARK = ('<svg class="mark" viewBox="0 0 64 56" aria-hidden="true">'
+             '<path d="M5 5.5 H59 L52.5 50.5 H11.5 Z" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>'
+             f'<g fill="currentColor">{_pins()}</g></svg>')
+
 # ---------------------------------------------------------------- shared parts
 CHAT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12Z"/></svg>'
 
@@ -83,7 +95,7 @@ def nav(lang, depth, switch_href=None, switch_label=None, home_anchor_prefix=Non
     sw = f'<a class="lang" href="{switch_href}" hreflang="{"en" if lang=="de" else "de"}">{switch_label}</a>' if switch_href else ""
     return f"""<header class="nav">
   <div class="wrap">
-    <a class="logo" href="{home or './'}" aria-label="{BRAND} home">autocode<b>RHX</b></a>
+    <a class="logo" href="{home or './'}" aria-label="{BRAND} home">{LOGO_MARK}<span>autocode<b>RHX</b></span></a>
     <nav aria-label="Main">
       <ul>
         <li><a href="{pre}#services">{u['services']}</a></li>
@@ -141,7 +153,7 @@ ORG = {
   "@context": "https://schema.org", "@type": "ProfessionalService", "@id": SITE_URL + "/#org",
   "name": BRAND, "url": SITE_URL + "/", "logo": SITE_URL + "/assets/apple-touch-icon.png",
   "image": SITE_URL + "/assets/og-image.png",
-  "description": "Remote online programming, coding and diagnostics for Volkswagen Group, Porsche, Lamborghini, Bentley and Mercedes-Benz vehicles.",
+  "description": "Remote online programming, coding and diagnostics for Volkswagen Group, Mercedes-Benz, BMW, Porsche, Lamborghini and Bentley vehicles.",
   "areaServed": [{"@type": "Place", "name": a} for a in AREAS],
   "knowsLanguage": ["en", "de", "hi"],
   "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Services", "itemListElement": [
@@ -155,23 +167,24 @@ def faq_ld(pairs):
 HOME = {
  "en": {
   "path": "/", "title": "VAG, Lamborghini & Bentley Online Programming | autocodeRHX",
-  "desc": "Remote online programming for VAG, Porsche, Lamborghini, Bentley and Mercedes. CarPlay activation, wiring diagrams and genuine diagnostic software.",
+  "desc": "Remote coding and online programming for VW, Audi, Mercedes, BMW, Porsche, Lamborghini and Bentley. AMG menu, CarPlay, Component Protection, wiring diagrams.",
   "status": "Remote sessions available worldwide",
   "h1": 'Online programming for <em>VAG, Porsche, Lamborghini</em> and Bentley.',
   "lede": "autocodeRHX connects to your car remotely and runs the coding, programming and activations that normally need a dealer. Genuine OEM software, done by an automotive engineer.",
   "cta1": "Start on WhatsApp", "cta2": "See all services",
-  "trust": ["Licensed software only", "ODIS · PIWIS · XENTRY · VCDS", "Quote before any work"],
+  "trust": ["Licensed software only", "ODIS · PIWIS · XENTRY · ISTA · VCDS", "Quote before any work"],
   "brands": "Brands covered",
   "svc_eyebrow": "Services", "svc_h2": "Everything, sorted by job.",
   "svc_p": "Pick a category or browse the full list. Every job starts with a free check that your car and setup support it.",
-  "filters": [("all", "All services"), ("online", "Online programming"), ("coding", "Activation &amp; coding"), ("software", "Software &amp; licenses"), ("diag", "Diagnostics &amp; wiring")],
+  "filters": [("all", "All services"), ("online", "Online programming"), ("coding", "Activation &amp; coding"), ("software", "Software &amp; licenses"), ("diag", "Diagnostics &amp; wiring"), ("mercedes", "Mercedes-Benz"), ("bmw", "BMW")],
   "ask": "Ask about this →", "more": "Details",
   "cats": [
    ("online", "A · ONLINE", "Online programming", "Jobs that need a live connection to the manufacturer's server: control unit replacement, software updates and online coding.", [
      ("vag-online-programming", "", "VW · AUDI · SEAT · ŠKODA · CUPRA", "", "VAG Online Programming", "SVM online coding after a control unit is replaced, flash updates and parameter sets pulled from the official backend.", ["ODIS", "SVM"]),
      ("lamborghini-online-programming", "exotic", "HURACÁN · URUS · AVENTADOR", "EXOTIC", "Lamborghini Online Programming", "Module replacement, online software updates and coding for Lamborghini, without trailering the car to a dealer.", ["OEM online"]),
      ("bentley-online-programming", "exotic", "CONTINENTAL · BENTAYGA · FLYING SPUR", "LUXURY", "Bentley Online Programming", "Online coding and programming for Bentley control units, including new and used module installation.", ["ODIS", "OEM online"]),
-     ("porsche-mercedes-programming", "", "PORSCHE · MERCEDES-BENZ", "", "Porsche &amp; Mercedes Programming", "Coding, programming and adaptations with the factory tools for each brand.", ["PIWIS", "XENTRY"]),
+     ("porsche-programming", "", "911 · CAYENNE · MACAN · TAYCAN", "", "Porsche PIWIS Programming", "Control unit coding, adaptations and retrofit coding with Porsche's own workshop system.", ["PIWIS"]),
+     ("component-protection", "wide", "VW · AUDI · SEAT · ŠKODA · PORSCHE · BENTLEY", "POPULAR", "Component Protection &amp; SVM", "Used cluster, radio or gateway showing \"Component Protection active\"? Adapted to your car through the official online process, then SVM coded. Proof of ownership required.", ["CP", "SVM", "ODIS"]),
    ]),
    ("coding", "B · CODING", "Activation &amp; coding", "Unlock features your car already has the hardware for, or make a retrofit work like it left the factory with it.", [
      ("carplay-activation", "wide", "MIB2 · MIB3 HEAD UNITS · OTHER BRANDS ON REQUEST", "POPULAR", "CarPlay &amp; Android Auto Activation", "Wired or wireless App-Connect switched on in your existing head unit. No new hardware, no dongle. Send your VIN first and I'll confirm your unit supports it.", ["Apple CarPlay", "Android Auto", "App-Connect"]),
@@ -187,6 +200,17 @@ HOME = {
      ("remote-diagnostics", "wide", "ALL COVERED BRANDS", "", "Remote Diagnostics", "Full scan of every control unit, fault codes explained in plain language, and a clear plan for what to check next and what to replace.", ["Full scan", "Guided fault finding"]),
      ("wiring-diagrams", "", "STROMLAUFPLÄNE", "", "Wiring Diagrams", "Current flow diagrams for your exact model, with connector pinouts, wire colours and fuse locations.", ["Per VIN", "PDF"]),
      ("remote-diagnostics", "", "MULTIMETER IN HAND", "", "Wiring Analysis", "Guided measurements to find the fault: voltage drop, shorts to ground, open circuits and CAN bus checks.", ["Component testing"]),
+   ]),
+   ("mercedes", "E · MERCEDES-BENZ", "Mercedes-Benz", "Coding and programming with XENTRY, the official Mercedes-Benz workshop system.", [
+     ("mercedes-coding", "exotic", "AMG CLUSTER DISPLAYS", "POPULAR", "AMG Menu Activation", "Oil temperatures, G-meter, boost and power displays in the instrument cluster. A coding change on supported clusters, no new hardware.", ["XENTRY"]),
+     ("mercedes-coding", "", "ISA · SPEED LIMIT CHIMES", "", "Speed Warning Settings", "Change how speed limit warnings and chimes behave. On EU cars registered since July 2024 only what the law allows.", ["Coding"]),
+     ("mercedes-coding", "", "HEAD UNIT", "", "Anti-Theft PIN Code", "Set up PIN protection, or get the head unit working after battery work or a unit swap. Proof of ownership required.", ["Owner verified"]),
+     ("mercedes-coding", "", "NTG · MBUX", "", "CarPlay, Variant Coding &amp; Retrofits", "Smartphone integration, SCN coding after module replacement, cameras, lights and ambient lighting.", ["SCN", "Retrofit"]),
+   ]),
+   ("bmw", "F · BMW", "BMW &amp; MINI", "Diagnosis, programming and coding with ISTA for F- and G-series BMW and MINI.", [
+     ("bmw-coding", "", "NBT EVO · MGU", "POPULAR", "BMW CarPlay Activation", "Apple CarPlay on supported head units, plus full-screen display where the hardware allows it.", ["CarPlay"]),
+     ("bmw-coding", "", "ISTA", "", "Programming &amp; Module Coding", "Software updates and coding after headlights, footwell module, cluster or head unit are replaced.", ["ISTA", "ICOM"]),
+     ("bmw-coding", "wide", "COMFORT · RETROFIT", "", "Retrofit &amp; Comfort Coding", "Reversing camera, LED lights, M steering wheel, digital speed display, sport displays, mirror folding and battery registration.", ["Retrofit", "Comfort"]),
    ]),
   ],
   "proc_eyebrow": "How it works", "proc_h2": "From message to finished job.", "proc_p": "Most jobs are done in one remote session while you sit next to the car.",
@@ -206,7 +230,7 @@ HOME = {
   "prep_eyebrow": "Before your session", "prep_h2": "A stable setup is half the job.",
   "prep_p": "Online programming writes software into control units. A dropped connection or a sagging battery mid-flash can leave a module unresponsive, so every session starts with this checklist.",
   "prep_note": "Don't have an interface or charger? Ask in the chat. I'll tell you what to buy or borrow for your car.",
-  "spec": [("Battery charger / power supply", "13.0 – 14.0 V stable", True), ("Diagnostic interface", "VAS 6154 / J2534", False), ("Laptop", "Windows 10/11", False), ("Internet", "Cable or strong Wi-Fi", False), ("Remote access tool", "I send the link", False), ("Ignition", "On, engine off", False), ("VIN", "17 characters", False)],
+  "spec": [("Battery charger / power supply", "13.0 – 14.0 V stable", True), ("Diagnostic interface", "VAS 6154 / J2534 / ENET", False), ("Laptop", "Windows 10/11", False), ("Internet", "Cable or strong Wi-Fi", False), ("Remote access tool", "I send the link", False), ("Ignition", "On, engine off", False), ("VIN", "17 characters", False)],
   "pillars": [("Genuine software only", "Every tool and license is official. That protects your car, your warranty and your money."),
               ("Engineer, not a reseller", "Automotive engineering background and hands-on dealer diagnostics. I understand why a job fails, not just which button to press."),
               ("Clear price up front", "You get a quote before anything starts. If a job turns out not to be possible on your car, you don't pay for it.")],
@@ -216,6 +240,7 @@ HOME = {
           ("Can you program cars from the US, UK or Middle East?", "Yes, in most cases. Software differs by market, so I check your VIN before quoting."),
           ("How do I know CarPlay will work on my car?", "Send your VIN first. I check the head unit hardware and software version and confirm before you pay anything."),
           ("What if something goes wrong during programming?", "That's why the checklist above exists. A stable voltage and connection are checked before the first write. If a step fails, I recover the module in the same session."),
+          ("Can you remove speed limit warnings?", "On cars outside the EU, often yes. New cars registered in the EU since July 2024 must have the speed assistant active at every start, so on those I only change what the regulation allows."),
           ("Which languages do you speak?", "English, German and Hindi."),
           ("How much does it cost?", "Prices depend on the car and the job. Send a message with your car and VIN for a fixed quote, usually the same day.")],
   "final_h2": "Ready when your car is.", "final_p": "Tell the assistant what you need. It writes the WhatsApp message for you, so you get a quote faster.", "final_cta": "Chat now",
@@ -231,18 +256,19 @@ HOME["de"].update({
   "h1": 'Online-Programmierung für <em>VAG, Porsche, Lamborghini</em> und Bentley.',
   "lede": "autocodeRHX verbindet sich per Fernzugriff mit deinem Auto und erledigt Codierungen, Programmierungen und Freischaltungen, für die man sonst zum Händler muss. Mit Original-Software, durchgeführt von einem Fahrzeugtechnik-Ingenieur.",
   "cta1": "Per WhatsApp starten", "cta2": "Alle Leistungen",
-  "trust": ["Nur lizenzierte Software", "ODIS · PIWIS · XENTRY · VCDS", "Festpreis vor Arbeitsbeginn"],
+  "trust": ["Nur lizenzierte Software", "ODIS · PIWIS · XENTRY · ISTA · VCDS", "Festpreis vor Arbeitsbeginn"],
   "brands": "Marken",
   "svc_eyebrow": "Leistungen", "svc_h2": "Alles nach Aufgabe sortiert.",
   "svc_p": "Wähl eine Kategorie oder schau dir alles an. Vor jedem Auftrag prüfe ich kostenlos, ob dein Auto und dein Setup passen.",
-  "filters": [("all", "Alle Leistungen"), ("online", "Online-Programmierung"), ("coding", "Freischaltung &amp; Codierung"), ("software", "Software &amp; Lizenzen"), ("diag", "Diagnose &amp; Elektrik")],
+  "filters": [("all", "Alle Leistungen"), ("online", "Online-Programmierung"), ("coding", "Freischaltung &amp; Codierung"), ("software", "Software &amp; Lizenzen"), ("diag", "Diagnose &amp; Elektrik"), ("mercedes", "Mercedes-Benz"), ("bmw", "BMW")],
   "ask": "Anfragen →", "more": "Details (EN)",
   "cats": [
    ("online", "A · ONLINE", "Online-Programmierung", "Arbeiten, die eine Live-Verbindung zum Herstellerserver brauchen: Steuergerätetausch, Software-Updates und Online-Codierung.", [
      ("vag-online-programming", "", "VW · AUDI · SEAT · ŠKODA · CUPRA", "", "VAG Online-Programmierung", "SVM-Online-Codierung nach Steuergerätetausch, Flash-Updates und Parametersätze direkt aus dem offiziellen Backend.", ["ODIS", "SVM"]),
      ("lamborghini-online-programming", "exotic", "HURACÁN · URUS · AVENTADOR", "EXOTIC", "Lamborghini Online-Programmierung", "Steuergerätetausch, Online-Software-Updates und Codierung für Lamborghini, ohne das Auto zum Händler zu transportieren.", ["OEM online"]),
      ("bentley-online-programming", "exotic", "CONTINENTAL · BENTAYGA · FLYING SPUR", "LUXURY", "Bentley Online-Programmierung", "Online-Codierung und Programmierung für Bentley-Steuergeräte, auch beim Einbau neuer oder gebrauchter Module.", ["ODIS", "OEM online"]),
-     ("porsche-mercedes-programming", "", "PORSCHE · MERCEDES-BENZ", "", "Porsche &amp; Mercedes Programmierung", "Codierung, Programmierung und Anpassungen mit den Werkstattsystemen der jeweiligen Marke.", ["PIWIS", "XENTRY"]),
+     ("porsche-programming", "", "911 · CAYENNE · MACAN · TAYCAN", "", "Porsche Programmierung (PIWIS)", "Steuergeräte codieren, Anpassungen und Nachrüst-Codierung mit dem Porsche-Werkstattsystem.", ["PIWIS"]),
+     ("component-protection", "wide", "VW · AUDI · SEAT · ŠKODA · PORSCHE · BENTLEY", "BELIEBT", "Komponentenschutz &amp; SVM", "Gebrauchtes Kombiinstrument, Radio oder Gateway zeigt \"Komponentenschutz aktiv\"? Wird über den offiziellen Online-Prozess an dein Auto angelernt und danach per SVM codiert. Eigentumsnachweis nötig.", ["CP", "SVM", "ODIS"]),
    ]),
    ("coding", "B · CODIERUNG", "Freischaltung &amp; Codierung", "Funktionen freischalten, für die die Hardware schon da ist, oder Nachrüstungen so codieren, als wären sie ab Werk verbaut.", [
      ("carplay-activation", "wide", "MIB2 · MIB3 · ANDERE MARKEN AUF ANFRAGE", "BELIEBT", "CarPlay &amp; Android Auto Freischaltung", "App-Connect kabelgebunden oder kabellos in deinem vorhandenen Infotainment aktiviert. Keine neue Hardware, kein Dongle. Schick mir zuerst deine FIN, dann prüfe ich die Kompatibilität.", ["Apple CarPlay", "Android Auto", "App-Connect"]),
@@ -258,6 +284,17 @@ HOME["de"].update({
      ("remote-diagnostics", "wide", "ALLE MARKEN", "", "Ferndiagnose", "Kompletter Scan aller Steuergeräte, Fehlercodes verständlich erklärt und ein klarer Plan, was als Nächstes geprüft oder getauscht wird.", ["Komplettscan", "Geführte Fehlersuche"]),
      ("wiring-diagrams", "", "STROMLAUFPLÄNE", "", "Stromlaufpläne", "Stromlaufpläne für dein genaues Modell mit Steckerbelegung, Leitungsfarben und Sicherungspositionen.", ["Per FIN", "PDF"]),
      ("remote-diagnostics", "", "MULTIMETER IN DER HAND", "", "Leitungsanalyse", "Geführte Messungen zur Fehlersuche: Spannungsabfall, Masseschluss, Unterbrechungen und CAN-Bus-Prüfung.", ["Bauteilprüfung"]),
+   ]),
+   ("mercedes", "E · MERCEDES-BENZ", "Mercedes-Benz", "Codierung und Programmierung mit XENTRY, dem offiziellen Mercedes-Benz-Werkstattsystem.", [
+     ("mercedes-coding", "exotic", "AMG-ANZEIGEN IM KOMBI", "BELIEBT", "AMG-Menü freischalten", "Öltemperaturen, G-Meter, Ladedruck- und Leistungsanzeige im Kombiinstrument. Bei passendem Kombi nur eine Codierung, keine neue Hardware.", ["XENTRY"]),
+     ("mercedes-coding", "", "ISA · TEMPOWARNUNG", "", "Tempowarnung anpassen", "Verhalten von Tempolimit-Warnungen und Warntönen ändern. Bei EU-Fahrzeugen mit Erstzulassung ab Juli 2024 nur im gesetzlichen Rahmen.", ["Codierung"]),
+     ("mercedes-coding", "", "HEAD UNIT", "", "Diebstahlschutz-PIN", "PIN-Schutz einrichten oder die Head Unit nach Batteriearbeiten oder Gerätetausch wieder freischalten. Eigentumsnachweis nötig.", ["Halter geprüft"]),
+     ("mercedes-coding", "", "NTG · MBUX", "", "CarPlay, Variantencodierung &amp; Nachrüstung", "Smartphone-Integration, SCN-Codierung nach Steuergerätetausch, Kameras, Licht und Ambientebeleuchtung.", ["SCN", "Nachrüstung"]),
+   ]),
+   ("bmw", "F · BMW", "BMW &amp; MINI", "Diagnose, Programmierung und Codierung mit ISTA für BMW und MINI der F- und G-Baureihen.", [
+     ("bmw-coding", "", "NBT EVO · MGU", "BELIEBT", "BMW CarPlay freischalten", "Apple CarPlay auf passenden Head Units, dazu Vollbild-Anzeige, wo die Hardware es kann.", ["CarPlay"]),
+     ("bmw-coding", "", "ISTA", "", "Programmierung &amp; Steuergeräte codieren", "Software-Updates und Codierung nach Tausch von Scheinwerfern, Fußraummodul, Kombi oder Head Unit.", ["ISTA", "ICOM"]),
+     ("bmw-coding", "wide", "KOMFORT · NACHRÜSTUNG", "", "Nachrüst- &amp; Komfort-Codierung", "Rückfahrkamera, LED-Licht, M-Lenkrad, digitale Tacho-Anzeige, Sportanzeigen, Spiegel anklappen und Batterie registrieren.", ["Nachrüstung", "Komfort"]),
    ]),
   ],
   "proc_eyebrow": "Ablauf", "proc_h2": "Von der Nachricht zum fertigen Auftrag.", "proc_p": "Die meisten Aufträge sind in einer Fernsitzung erledigt, während du am Auto sitzt.",
@@ -277,7 +314,7 @@ HOME["de"].update({
   "prep_eyebrow": "Vor der Sitzung", "prep_h2": "Ein stabiles Setup ist die halbe Miete.",
   "prep_p": "Bei der Online-Programmierung wird Software in Steuergeräte geschrieben. Bricht die Verbindung ab oder sackt die Spannung beim Flashen ein, kann ein Steuergerät hängen bleiben. Deshalb beginnt jede Sitzung mit dieser Checkliste.",
   "prep_note": "Kein Interface oder Ladegerät? Frag im Chat. Ich sage dir, was du für dein Auto brauchst.",
-  "spec": [("Batterieladegerät / Netzteil", "13,0 – 14,0 V stabil", True), ("Diagnose-Interface", "VAS 6154 / J2534", False), ("Laptop", "Windows 10/11", False), ("Internet", "Kabel oder starkes WLAN", False), ("Fernzugriff", "Link kommt von mir", False), ("Zündung", "An, Motor aus", False), ("FIN", "17 Zeichen", False)],
+  "spec": [("Batterieladegerät / Netzteil", "13,0 – 14,0 V stabil", True), ("Diagnose-Interface", "VAS 6154 / J2534 / ENET", False), ("Laptop", "Windows 10/11", False), ("Internet", "Kabel oder starkes WLAN", False), ("Fernzugriff", "Link kommt von mir", False), ("Zündung", "An, Motor aus", False), ("FIN", "17 Zeichen", False)],
   "pillars": [("Nur Original-Software", "Jedes Tool und jede Lizenz ist offiziell. Das schützt dein Auto, deine Garantie und dein Geld."),
               ("Ingenieur, kein Wiederverkäufer", "Studium der Fahrzeugtechnik und Praxis in der Händlerdiagnose. Ich verstehe, warum ein Job scheitert, nicht nur, welchen Knopf man drückt."),
               ("Klarer Preis vorab", "Du bekommst ein Angebot, bevor es losgeht. Geht der Auftrag bei deinem Auto nicht, zahlst du nichts.")],
@@ -287,6 +324,7 @@ HOME["de"].update({
           ("Geht das auch mit Autos aus den USA, UK oder dem Nahen Osten?", "In den meisten Fällen ja. Die Software unterscheidet sich je nach Markt, deshalb prüfe ich vorher deine FIN."),
           ("Woher weiß ich, ob CarPlay bei mir funktioniert?", "Schick zuerst deine FIN. Ich prüfe Hardware und Softwarestand deines Infotainments, bevor du etwas zahlst."),
           ("Was passiert, wenn beim Programmieren etwas schiefgeht?", "Dafür gibt es die Checkliste. Spannung und Verbindung werden vor dem ersten Schreibvorgang geprüft. Schlägt ein Schritt fehl, stelle ich das Steuergerät in derselben Sitzung wieder her."),
+          ("Kannst du Tempowarnungen entfernen?", "Bei Fahrzeugen außerhalb der EU oft ja. Neuwagen mit EU-Erstzulassung ab Juli 2024 müssen den Geschwindigkeitsassistenten bei jedem Start aktiv haben. Dort ändere ich nur, was die Vorschrift erlaubt."),
           ("Welche Sprachen sprichst du?", "Deutsch, Englisch und Hindi."),
           ("Was kostet das?", "Das hängt vom Auto und vom Auftrag ab. Schick mir Auto und FIN und du bekommst meist noch am selben Tag einen Festpreis.")],
   "final_h2": "Bereit, wenn dein Auto es ist.", "final_p": "Sag dem Assistenten, was du brauchst. Er schreibt die WhatsApp-Nachricht für dich, damit du schneller ein Angebot bekommst.", "final_cta": "Jetzt chatten",
@@ -294,7 +332,7 @@ HOME["de"].update({
 
 def home_page(lang):
     H = HOME[lang]; depth = 1 if lang == "de" else 0; r = "../" * depth
-    brands = ["Volkswagen", "Audi", "Lamborghini", "SEAT", "Škoda", "Cupra", "Bentley", "Porsche", "Mercedes-Benz", "McLaren", "Maserati"]
+    brands = ["Volkswagen", "Audi", "Lamborghini", "SEAT", "Škoda", "Cupra", "Bentley", "Porsche", "Mercedes-Benz", "AMG", "BMW", "MINI", "McLaren", "Maserati"]
     ex = {"Lamborghini", "Bentley", "McLaren"}
     def brand_span(b, hidden=False):
         cls = ' class="x"' if b in ex else ""
@@ -467,26 +505,43 @@ def notfound_page():
     return (out + tail).replace("__BASE__", BASE_PATH)
 
 # ---------------------------------------------------------------- static extras
-FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#0A1820"/><rect x="3" y="3" width="58" height="58" rx="10" fill="none" stroke="#FFB547" stroke-width="2"/><text x="32" y="41" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="22" fill="#FFB547">RHX</text></svg>"""
+FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#0A1820"/><path d="M7 11 H57 L51 53 H13 Z" fill="none" stroke="#FFB547" stroke-width="5" stroke-linejoin="round"/><text x="32" y="44" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="28" fill="#FFB547">R</text></svg>"""
 
 def make_images():
     from PIL import Image, ImageDraw, ImageFont
-    B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"; M = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
-    W, Hh = 1200, 630
-    im = Image.new("RGB", (W, Hh), "#0A1820"); d = ImageDraw.Draw(im)
-    for x in range(0, W, 56): d.line([(x, 0), (x, Hh)], fill="#12293A")
-    for y in range(0, Hh, 56): d.line([(0, y), (W, y)], fill="#12293A")
-    big = ImageFont.truetype(B, 96); mid = ImageFont.truetype(B, 40); mono = ImageFont.truetype(M, 26)
-    d.text((80, 150), "autocode", font=big, fill="#E4EDF1")
-    w = d.textlength("autocode", font=big); d.text((80 + w, 150), "RHX", font=big, fill="#FFB547")
-    d.text((80, 300), "Remote online programming", font=mid, fill="#E4EDF1")
-    d.text((80, 352), "VAG · Porsche · Lamborghini · Bentley · Mercedes", font=mid, fill="#8DA5B2")
-    d.rectangle([80, 460, 1120, 462], fill="#1E3A4A")
-    d.text((80, 490), "● online   CarPlay activation · Wiring diagrams · Licensed software", font=mono, fill="#5FD0C4")
+    B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"; R = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+    AMB, GND, TXT, MUT, LN = "#FFB547", "#0A1820", "#E4EDF1", "#8DA5B2", "#12293A"
+
+    def socket(d, x, y, w, letters=None, font=None, pins=True):
+        s = w / 64.0
+        pts = [(x + 5*s, y + 5.5*s), (x + 59*s, y + 5.5*s), (x + 52.5*s, y + 50.5*s), (x + 11.5*s, y + 50.5*s)]
+        d.polygon(pts, fill=GND)
+        d.line(pts + [pts[0]], fill=AMB, width=max(2, int(3.5*s)), joint="curve")
+        if pins:
+            r = 1.9 * s
+            for i in range(8):
+                for cx, cy in ((14 + i*5.15, 20 if not letters else 14), (16.6 + i*4.4, 36 if not letters else 44)):
+                    X, Y = x + cx*s, y + cy*s
+                    d.ellipse([X - r, Y - r, X + r, Y + r], fill=AMB)
+        if letters:
+            tw = d.textlength(letters, font=font)
+            d.text((x + 32*s - tw/2, y + 29*s), letters, font=font, fill=AMB, anchor="lm")
+
+    W, H = 1200, 630
+    im = Image.new("RGB", (W, H), GND); d = ImageDraw.Draw(im)
+    for gx in range(0, W, 56): d.line([(gx, 0), (gx, H)], fill=LN)
+    for gy in range(0, H, 56): d.line([(0, gy), (W, gy)], fill=LN)
+    socket(d, 80, 120, 150)
+    big = ImageFont.truetype(B, 88); mid = ImageFont.truetype(B, 38); small = ImageFont.truetype(R, 28)
+    d.text((260, 150), "autocode", font=big, fill=TXT)
+    w = d.textlength("autocode", font=big); d.text((260 + w, 150), "RHX", font=big, fill=AMB)
+    d.text((80, 330), "Remote coding and online programming", font=mid, fill=TXT)
+    d.text((80, 385), "VAG · Mercedes-Benz · BMW · Porsche · Lamborghini · Bentley", font=small, fill=MUT)
+    d.text((80, 500), "WhatsApp +91 94288 53797", font=small, fill=AMB)
     im.save(os.path.join(SRC_ASSETS, "og-image.png"), optimize=True)
-    ic = Image.new("RGB", (180, 180), "#0A1820"); d = ImageDraw.Draw(ic)
-    d.rounded_rectangle([8, 8, 172, 172], radius=26, outline="#FFB547", width=4)
-    f = ImageFont.truetype(B, 50); tw = d.textlength("RHX", font=f); d.text(((180 - tw) / 2, 58), "RHX", font=f, fill="#FFB547")
+
+    ic = Image.new("RGB", (180, 180), GND); d = ImageDraw.Draw(ic)
+    socket(d, 14, 26, 152, letters="RHX", font=ImageFont.truetype(B, 40))
     ic.save(os.path.join(SRC_ASSETS, "apple-touch-icon.png"), optimize=True)
 
 def write(rel, content):

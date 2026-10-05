@@ -1,6 +1,164 @@
 # Service landing pages (English). Each page targets one search intent.
 # Edit text here, then run:  python3 build.py
 
+PORSCHE = {
+ "slug": "porsche-programming",
+ "nav": "Porsche PIWIS Programming",
+ "chat": "Porsche Programming",
+ "title": "Porsche PIWIS Coding & Programming | autocodeRHX",
+ "desc": "Remote Porsche coding and programming with PIWIS for 911, Cayenne, Macan, Panamera and Taycan. Module replacement, retrofits and diagnostics.",
+ "eyebrow": "911 · CAYENNE · MACAN · PANAMERA · TAYCAN",
+ "h1": "Porsche programming with PIWIS",
+ "lede": "Control unit coding, adaptations and retrofit coding with Porsche's own workshop system, done remotely.",
+ "short": "Coding, adaptations and retrofits with PIWIS.",
+ "keywords": ["Porsche PIWIS coding", "Porsche programming", "Porsche retrofit coding"],
+ "body": """
+<h2>Dealer tooling for Porsche</h2>
+<p>PIWIS is Porsche's own diagnostic and programming system. It's the tool for jobs that generic scanners can't finish: coding a replaced control unit, adaptations after repairs and enabling retrofitted equipment.</p>
+
+<h2>Common jobs</h2>
+<ul>
+<li>Coding a new or used control unit to your car</li>
+<li>Adaptations and calibrations after repairs</li>
+<li>Retrofit coding for supported equipment (lights, cameras, assistance systems)</li>
+<li>Full-system scan and diagnosis of electrical faults</li>
+</ul>
+
+<h2>Models</h2>
+<p>911, Cayenne, Macan, Panamera, Taycan and Boxster/Cayman. Model year, market and installed software decide what's possible, so send your VIN first.</p>
+""",
+ "faq": [
+  ("Which Porsche models do you cover?", "911, Cayenne, Macan, Panamera, Taycan and Boxster/Cayman. Send the VIN to confirm your car."),
+  ("Do I need my own PIWIS?", "No. You provide the interface and laptop at the car. I run the software."),
+  ("Is this done remotely?", "Yes, like every autocodeRHX service."),
+ ],
+ "related": ["remote-diagnostics", "vag-online-programming", "wiring-diagrams"],
+}
+
+MERCEDES = {
+ "slug": "mercedes-coding",
+ "nav": "Mercedes-Benz Coding",
+ "chat": "Mercedes-Benz Coding",
+ "title": "Mercedes Coding: AMG Menu, PIN Code, XENTRY | autocodeRHX",
+ "desc": "Remote Mercedes-Benz coding with XENTRY: AMG menu activation, speed warning settings, anti-theft PIN code, CarPlay, variant coding and retrofits.",
+ "eyebrow": "C · E · S-CLASS · GLC · GLE · AMG",
+ "h1": "Mercedes-Benz coding and programming",
+ "lede": "AMG menu, speed warning settings, anti-theft PIN, smartphone integration and retrofit coding for Mercedes-Benz, done remotely with XENTRY.",
+ "short": "AMG menu, PIN code, speed warnings, CarPlay, retrofits.",
+ "keywords": ["Mercedes AMG menu activation", "Mercedes coding", "Mercedes anti-theft PIN", "XENTRY variant coding"],
+ "body": """
+<h2 id="amg">AMG menu activation</h2>
+<p>Many Mercedes models can show the AMG menu in the instrument cluster: engine and gearbox oil temperature, G-meter, boost and power/torque displays, and on some cars a lap timer. On supported clusters it's a coding change, so no new hardware is needed.</p>
+
+<h2 id="speed-warning">Speed limit warning settings</h2>
+<p>Newer cars warn with chimes and messages every time the speed limit is exceeded. I can change how these warnings behave and switch off the repeat chimes where this is allowed.</p>
+<p><strong>Note for EU-registered cars:</strong> new cars registered in the EU since July 2024 must have the Intelligent Speed Assistant (ISA) active at every engine start. On these cars I only change what the regulation allows. Cars outside the EU have more options. Tell me where the car is registered.</p>
+
+<h2 id="pin">Anti-theft PIN code</h2>
+<p>Set up PIN protection on the head unit, or get a head unit working again after battery work, a repair or a unit swap when it asks for its anti-theft code. <strong>Proof of ownership is required</strong>: a registration document that matches the VIN.</p>
+
+<h2>More Mercedes jobs</h2>
+<ul>
+<li>Apple CarPlay and Android Auto (smartphone integration) on supported NTG head units</li>
+<li>Variant coding and SCN online coding after a control unit is replaced</li>
+<li>Retrofit coding: reversing and 360° cameras, lights, ambient lighting, steering wheels</li>
+<li>Comfort coding: ambient light colours, start-stop remembers your last setting, display options</li>
+<li>Full-system scan and electrical fault finding with XENTRY</li>
+</ul>
+
+<h2>Supported models</h2>
+<p>C-, E- and S-Class, CLA, CLS, GLA, GLC, GLE, GLS, G-Class, and AMG models. What's possible depends on the cluster, head unit and software level, so I check your VIN first.</p>
+""",
+ "faq": [
+  ("Can every Mercedes show the AMG menu?", "No. It depends on the instrument cluster and its software. Send your VIN and I'll confirm before you pay."),
+  ("Can you remove the speed limit warning completely?", "On cars outside the EU, often yes. On EU cars registered since July 2024 the speed assistant must stay active at each start by law, so I only adjust what's allowed."),
+  ("Why do you need proof of ownership for PIN codes?", "Anti-theft codes protect the car. I only work on them for the registered owner or their workshop."),
+  ("Do you use XENTRY?", "Yes, XENTRY is the official Mercedes-Benz workshop system."),
+ ],
+ "related": ["remote-diagnostics", "carplay-activation", "wiring-diagrams"],
+}
+
+BMW = {
+ "slug": "bmw-coding",
+ "nav": "BMW Coding & Programming",
+ "chat": "BMW Coding & Programming",
+ "title": "BMW Coding & ISTA Programming, CarPlay | autocodeRHX",
+ "desc": "Remote BMW and MINI coding and programming with ISTA: CarPlay activation, module replacement, software updates, retrofits and comfort coding.",
+ "eyebrow": "BMW · MINI · F / G SERIES",
+ "h1": "BMW coding and programming",
+ "lede": "CarPlay, software updates, module replacement and retrofit coding for BMW and MINI. Done remotely with ISTA.",
+ "short": "CarPlay, ISTA programming, retrofits and comfort coding.",
+ "keywords": ["BMW coding", "BMW ISTA programming", "BMW CarPlay activation", "BMW retrofit coding"],
+ "body": """
+<h2>Programming with ISTA</h2>
+<p>ISTA is BMW's workshop system for diagnosis and programming. I use it for software updates, coding a replaced control unit and the programming step after a repair, on F- and G-series BMW and MINI.</p>
+
+<h2>Popular BMW jobs</h2>
+<ul>
+<li><strong>Apple CarPlay activation</strong> on supported NBT Evo and MGU head units, plus full-screen display where the hardware supports it</li>
+<li><strong>Module replacement and coding:</strong> headlights, footwell module, instrument cluster, head unit</li>
+<li><strong>Software updates</strong> for control units and the whole vehicle</li>
+<li><strong>Retrofit coding:</strong> reversing camera, LED or laser lights, M steering wheel, parking sensors, assistance systems</li>
+<li><strong>Comfort coding:</strong> digital speed display, sport displays, mirror folding with the key, start-stop remembers your last setting</li>
+<li><strong>Battery registration</strong> after a battery change, so the charging strategy matches the new battery</li>
+</ul>
+
+<h2>Before the session</h2>
+<p>BMW programming sessions can be long and draw a lot of current. A strong battery charger is essential, plus a Windows laptop, a supported interface (ENET cable or ICOM) and stable internet. I'll confirm the exact setup for your car.</p>
+
+<h2>Check first</h2>
+<p>Head unit generation, model year and installed software decide what's possible. Send your VIN and I'll tell you exactly what your car supports.</p>
+""",
+ "faq": [
+  ("Which BMW models do you cover?", "F- and G-series BMW and current MINI models. Older E-series on request."),
+  ("Which interface do I need?", "For most coding an ENET cable is enough. Larger programming jobs work best with an ICOM. I'll tell you which fits your job."),
+  ("Is battery registration really needed?", "Yes. Without it the car charges a new battery as if it were the old one, which shortens its life."),
+  ("Do you do video in motion?", "No. Video while driving is a distraction and illegal in many countries."),
+ ],
+ "related": ["carplay-activation", "remote-diagnostics", "wiring-diagrams"],
+}
+
+CP = {
+ "slug": "component-protection",
+ "nav": "Component Protection (VAG)",
+ "chat": "Component Protection / SVM",
+ "title": "Component Protection Removal & SVM (VW, Audi) | autocodeRHX",
+ "desc": "Component Protection adaptation for VW, Audi, SEAT, Škoda, Porsche and Bentley parts through the official online process, plus SVM coding. Remote.",
+ "eyebrow": "VW · AUDI · SEAT · ŠKODA · PORSCHE · BENTLEY",
+ "h1": "Component Protection and SVM for VAG",
+ "lede": "Used cluster, radio or gateway showing \"Component Protection active\"? It gets adapted to your car through the official online process, then SVM coded. Done remotely.",
+ "short": "Adapting used modules through the official online process.",
+ "keywords": ["Component Protection removal", "VAG component protection", "CP removal Audi", "SVM coding"],
+ "body": """
+<h2>What Component Protection is</h2>
+<p>Component Protection (CP) is Volkswagen Group's anti-theft system for electronic parts. Instrument clusters, infotainment units, gateways, climate controls and other modules are tied to the car they were built for. Fit one from another car and it locks: no radio sound, missing functions, and the fault "Component Protection active".</p>
+
+<h2>How it's removed</h2>
+<p>The legitimate way is the manufacturer's online process. The vehicle connects to the official backend, ownership of the part and car is checked, and the module is adapted to your VIN. After that the module usually needs <strong>SVM online coding</strong> so its software and coding match your car.</p>
+<ul>
+<li>CP adaptation for used or new modules</li>
+<li>SVM online coding and installation list update</li>
+<li>Full scan before and after</li>
+</ul>
+<p><strong>Proof of ownership is required</strong> for the car (registration matching the VIN). CP exists to stop stolen parts being reused, so this isn't optional.</p>
+
+<h2>Typical cases</h2>
+<ul>
+<li>Instrument cluster or virtual cockpit from a breaker's yard</li>
+<li>MIB infotainment unit swapped after a fault</li>
+<li>Gateway or climate control replaced after water damage</li>
+<li>Audi MMI and Porsche PCM units</li>
+</ul>
+""",
+ "faq": [
+  ("Can CP be removed offline?", "Not through the official process. CP adaptation needs the manufacturer's online backend, which is what I use."),
+  ("Which parts have Component Protection?", "Typically instrument clusters, infotainment units, gateways, climate control and some comfort modules. The scan shows which modules report CP."),
+  ("Do I need SVM after CP?", "Usually yes, so the module's software and coding match your car. Both can be done in one session."),
+  ("What do I need to send?", "VIN, a scan or photo of the fault, and the registration document."),
+ ],
+ "related": ["vag-online-programming", "remote-diagnostics", "wiring-diagrams"],
+}
+
 SERVICES = [
 {
  "slug": "vag-online-programming",
@@ -50,8 +208,9 @@ SERVICES = [
   ("Can you program cars from the US or the Middle East?", "Yes, in most cases. Market-specific software is checked against your VIN before we start."),
   ("What happens if the connection drops?", "That's why we check voltage and internet before the first write. If a step fails, the module is recovered in the same session."),
  ],
- "related": ["carplay-activation", "remote-diagnostics", "wiring-diagrams"],
+ "related": ["component-protection", "carplay-activation", "remote-diagnostics"],
 },
+CP,
 {
  "slug": "lamborghini-online-programming",
  "nav": "Lamborghini Online Programming",
@@ -130,43 +289,9 @@ SERVICES = [
  ],
  "related": ["lamborghini-online-programming", "vag-online-programming", "wiring-diagrams"],
 },
-{
- "slug": "porsche-mercedes-programming",
- "nav": "Porsche & Mercedes Programming",
- "chat": "Porsche / Mercedes Programming",
- "title": "Porsche PIWIS & Mercedes XENTRY Coding | autocodeRHX",
- "desc": "Remote Porsche and Mercedes-Benz coding and programming with PIWIS and XENTRY. Control unit replacement, retrofits, adaptations and diagnostics.",
- "eyebrow": "PORSCHE · MERCEDES-BENZ",
- "h1": "Porsche and Mercedes-Benz programming",
- "lede": "Coding, programming and adaptations with the factory tools for each brand: PIWIS for Porsche, XENTRY for Mercedes-Benz. Done remotely.",
- "short": "Coding and programming with PIWIS and XENTRY.",
- "keywords": ["Porsche PIWIS coding", "Mercedes XENTRY coding", "Porsche programming", "Mercedes variant coding"],
- "body": """
-<h2>Porsche with PIWIS</h2>
-<p>PIWIS is Porsche's own diagnostic and programming system. I use it for control unit coding after replacement, adaptations, retrofit coding where the car supports it, and full diagnosis across models like the 911, Cayenne, Macan, Panamera and Taycan.</p>
-
-<h2>Mercedes-Benz with XENTRY</h2>
-<p>XENTRY is the Mercedes-Benz workshop system. Typical jobs are variant coding, control unit adaptation after replacement, initial startup of new modules and diagnosis of complex electrical faults across C-, E-, S-Class, GLC, GLE and other models.</p>
-
-<h2>Common jobs</h2>
-<ul>
-<li>Coding a replaced or used control unit to your car</li>
-<li>Adaptations and calibrations after repairs</li>
-<li>Retrofit coding for supported equipment</li>
-<li>Diagnosing faults that generic scan tools can't explain</li>
-</ul>
-
-<h2>Check first, then quote</h2>
-<p>Model year, market and installed software decide what's possible. Send your VIN and the job, and you'll get a clear answer and a fixed price before anything starts.</p>
-""",
- "faq": [
-  ("Which Porsche models do you cover?", "911, Cayenne, Macan, Panamera, Taycan and Boxster/Cayman. Send the VIN to confirm your car."),
-  ("Can you do Mercedes SCN coding?", "Some jobs need online SCN coding through the Mercedes backend. Send the job and VIN and I'll tell you what applies."),
-  ("Do I need my own PIWIS or XENTRY?", "No. You provide the interface and laptop at the car. I run the software."),
-  ("Is this remote too?", "Yes, like every autocodeRHX service."),
- ],
- "related": ["remote-diagnostics", "diagnostic-software-licenses", "wiring-diagrams"],
-},
+PORSCHE,
+MERCEDES,
+BMW,
 {
  "slug": "carplay-activation",
  "nav": "CarPlay Activation",
@@ -191,7 +316,8 @@ SERVICES = [
 </ul>
 
 <h2>Which cars are supported?</h2>
-<p>It depends on the head unit: MIB2, MIB2.5 and MIB3 systems in models like the Golf 7 and 8, Passat, Tiguan, Polo, Audi A3, A4 and Q5, Škoda Octavia and Superb, SEAT Leon and Cupra Formentor. Not every unit can be activated, so <strong>I check your VIN and software version first</strong>. If yours isn't compatible, you'll know before you pay. Other brands on request.</p>
+<p>It depends on the head unit: MIB2, MIB2.5 and MIB3 systems in models like the Golf 7 and 8, Passat, Tiguan, Polo, Audi A3, A4 and Q5, Škoda Octavia and Superb, SEAT Leon and Cupra Formentor. Not every unit can be activated, so <strong>I check your VIN and software version first</strong>. If yours isn't compatible, you'll know before you pay.</p>
+<p>Driving a BMW or Mercedes? See <a href="../bmw-coding/">BMW coding</a> and <a href="../mercedes-coding/">Mercedes-Benz coding</a> for CarPlay on those brands.</p>
 
 <h2>How it works</h2>
 <p>Send your VIN through the chat. I confirm compatibility and send a quote. In the session you connect a laptop and interface, I activate App-Connect remotely and we test it with your phone before finishing.</p>
@@ -241,7 +367,7 @@ SERVICES = [
   ("Which license should a small independent workshop start with?", "It depends on the brands you see most. Message me with your typical cars and I'll suggest a setup."),
   ("Can you help me use my own ODIS or XENTRY?", "Yes. I can guide or run jobs with your license over a remote session."),
  ],
- "related": ["vag-online-programming", "porsche-mercedes-programming", "remote-diagnostics"],
+ "related": ["vag-online-programming", "porsche-programming", "remote-diagnostics"],
 },
 {
  "slug": "wiring-diagrams",
@@ -291,7 +417,7 @@ SERVICES = [
   ("Can I get the full wiring manual for my car?", "Tell me what you're working on and I'll send what you need for that job."),
   ("Do you help interpret the diagram?", "Yes. Guided wiring analysis is available as a remote session."),
  ],
- "related": ["remote-diagnostics", "vag-online-programming", "porsche-mercedes-programming"],
+ "related": ["remote-diagnostics", "vag-online-programming", "porsche-programming"],
 },
 {
  "slug": "remote-diagnostics",
@@ -336,6 +462,6 @@ SERVICES = [
   ("Can you fix the fault remotely too?", "If the fix is coding, programming or adaptation, yes. If a part or wire is faulty, I tell you exactly which."),
   ("Do I get a report?", "Yes, a short summary of findings and next steps."),
  ],
- "related": ["wiring-diagrams", "vag-online-programming", "porsche-mercedes-programming"],
+ "related": ["wiring-diagrams", "mercedes-coding", "bmw-coding"],
 },
 ]
