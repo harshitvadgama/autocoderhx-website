@@ -5,6 +5,7 @@ Edit SITE_URL once you own the domain, then run:  python3 build.py
 import json, os, shutil, datetime, html
 from content_services import SERVICES
 from content_regions import REGIONS
+from content_guides import GUIDES
 
 # Live domain. For a hidden preview build use: SITE_URL=https://harshitvadgama.github.io/autocoderhx-website CUSTOM_DOMAIN=0
 SITE_URL = os.environ.get("SITE_URL", "https://www.autocoderhv.com")
@@ -44,12 +45,12 @@ WHATSAPP_DISPLAY = "+91 94288 53797"   # also set in assets/site.js
 CHAT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.2A8.5 8.5 0 1 1 21 12Z"/></svg>'
 
 UI = {
- "en": {"services": "Services", "how": "How it works", "regions": "Worldwide", "faq": "FAQ", "quote": "Get a quote",
+ "en": {"services": "Services", "how": "How it works", "regions": "Worldwide", "faq": "FAQ", "guides": "Guides", "quote": "Get a quote",
         "contact": "Contact me", "home": "Home", "assistant": "autocodeRHV assistant", "replies": "● replies on WhatsApp",
         "type": "Type a message…", "send": "Send", "restart": "Start over", "close": "Close chat",
         "foot1": "Remote coding, programming &amp; diagnostics", "foot2": "Brand names are used only to describe compatibility. autocodeRHV is not affiliated with any manufacturer.",
         "allsvc": "All services"},
- "de": {"services": "Leistungen", "how": "Ablauf", "regions": "Weltweit", "faq": "FAQ", "quote": "Angebot anfragen",
+ "de": {"services": "Leistungen", "how": "Ablauf", "regions": "Weltweit", "faq": "FAQ", "guides": "Ratgeber", "quote": "Angebot anfragen",
         "contact": "Kontakt", "home": "Start", "assistant": "autocodeRHV-Assistent", "replies": "● antwortet per WhatsApp",
         "type": "Nachricht schreiben…", "send": "Senden", "restart": "Neu starten", "close": "Chat schließen",
         "foot1": "Codierung, Programmierung &amp; Diagnose aus der Ferne", "foot2": "Markennamen dienen nur zur Beschreibung der Kompatibilität. autocodeRHV steht in keiner Verbindung zu den Herstellern.",
@@ -105,6 +106,7 @@ def nav(lang, depth, switch_href=None, switch_label=None, home_anchor_prefix=Non
         <li><a href="{pre}#services">{u['services']}</a></li>
         <li><a href="{pre}#process">{u['how']}</a></li>
         <li><a href="{pre}#worldwide">{u['regions']}</a></li>
+        <li><a href="{r}guides/">{u['guides']}</a></li>
         <li><a href="{pre}#faq">{u['faq']}</a></li>
       </ul>
     </nav>
@@ -119,10 +121,12 @@ def footer(lang, depth):
     u = UI[lang]; r = "../" * depth
     links = " · ".join(f'<a href="{r}services/{s["slug"]}/">{s["nav"]}</a>' for s in SERVICES)
     countries = " · ".join(f'<a href="{r}{g["code"]}/" hreflang="{g["hreflang"]}">{g["country"]}</a>' for g in REGIONS)
+    guides = f'<a href="{r}guides/">Guides</a>: ' + " · ".join(f'<a href="{r}guides/{x["slug"]}/">{x["h1"].split(":")[0].replace(chr(34), "")}</a>' for x in GUIDES)
     return f"""<footer>
   <div class="wrap" style="flex-direction:column;gap:1.2rem">
     <nav aria-label="Services" style="font-size:.84rem;line-height:1.9">{links}</nav>
     <nav aria-label="Countries" style="font-size:.84rem;line-height:1.9">{countries}</nav>
+    <nav aria-label="Guides" style="font-size:.84rem;line-height:1.9">{guides}</nav>
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem">
       <span><b style="color:var(--text);font-family:var(--f-display);font-stretch:115%">autocode<span style="color:var(--amber)">RHV</span></b> · {u['foot1']}</span>
       <span>{u['foot2']}</span>
@@ -462,6 +466,8 @@ def service_page(s):
     out += nav("en", depth, switch_href=r + "de/", switch_label="DE", home_anchor_prefix=r)
     faq = "".join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in s["faq"])
     related = "".join(f'<a href="../{x}/"><strong>{SVC[x]["nav"]}</strong><span>{SVC[x]["short"]}</span></a>' for x in s["related"])
+    gl = [g for g in GUIDES if g["service"] == s["slug"]]
+    svc_guides = ("<h2>Guides</h2><ul>" + "".join(f'<li><a href="{r}guides/{g["slug"]}/">{g["h1"]}</a></li>' for g in gl) + "</ul>") if gl else ""
     out += f"""<main>
   <section class="page-hero">
     <div class="wrap">
@@ -478,6 +484,7 @@ def service_page(s):
   <div class="wrap article">
     <article class="prose">
 {s['body']}
+      {svc_guides}
       <h2>Frequently asked questions</h2>
       <div class="faq">{faq}</div>
     </article>
@@ -558,6 +565,83 @@ def region_page(g):
     out += footer("en", depth) + chat("en", depth)
     return out
 
+def guide_page(g):
+    depth = 2; r = "../../"; path = f"/guides/{g['slug']}/"
+    svc = SVC[g["service"]]
+    art_ld = {"@context": "https://schema.org", "@type": "Article", "headline": g["h1"], "description": g["desc"],
+              "datePublished": g["date"], "dateModified": g["date"], "inLanguage": "en",
+              "mainEntityOfPage": SITE_URL + path, "image": SITE_URL + "/assets/og-image.png",
+              "author": {"@type": "Organization", "name": BRAND, "url": SITE_URL + "/"}, "publisher": {"@id": SITE_URL + "/#org"}}
+    crumbs_ld = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
+        {"@type": "ListItem", "position": 2, "name": "Guides", "item": SITE_URL + "/guides/"},
+        {"@type": "ListItem", "position": 3, "name": g["h1"], "item": SITE_URL + path}]}
+    out = head("en", g["title"], g["desc"], path, depth, [ORG, art_ld, crumbs_ld, faq_ld(g["faq"])], [("en", path), ("x-default", path)], og_type="article")
+    out += nav("en", depth, switch_href=r + "de/", switch_label="DE", home_anchor_prefix=r)
+    faq = "".join(f'<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>' for q, a in g["faq"])
+    others = "".join([f'<a href="../{x["slug"]}/"><strong>{x["h1"]}</strong><span>{x["lede"][:110].rsplit(" ",1)[0]}…</span></a>' for x in GUIDES if x is not g][:3])
+    out += f"""<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="{r}">Home</a><span>/</span><a href="../">Guides</a><span>/</span><span aria-current="page">{svc['nav']}</span></nav>
+      <span class="eyebrow">Guide · {svc['nav']} · <time datetime="{g['date']}">{g['date']}</time></span>
+      <h1 style="margin-top:.8rem">{g['h1']}</h1>
+      <p class="lede">{g['lede']}</p>
+    </div>
+  </section>
+  <div class="wrap article">
+    <article class="prose">
+{g['body']}
+      <h2>Frequently asked questions</h2>
+      <div class="faq">{faq}</div>
+    </article>
+    <aside class="aside">
+      <div class="aside-box">
+        <h3>{svc['nav']}</h3>
+        <p>{svc['short']} Remote, with a free VIN check first.</p>
+        <a class="btn btn-ghost" href="{r}services/{svc['slug']}/">Service details</a>
+        <button class="btn btn-amber" type="button" data-open-chat="{esc(svc['chat'])}">{CHAT_ICON}Get a quote</button>
+        <p class="mono" style="font-size:.85rem">WhatsApp {WHATSAPP_DISPLAY}</p>
+      </div>
+    </aside>
+  </div>
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><div><span class="eyebrow">Read next</span><h2 style="margin-top:.6rem;font-size:clamp(1.4rem,3vw,2rem)">More guides</h2></div></div>
+      <div class="related">{others}</div>
+    </div>
+  </section>
+</main>
+"""
+    out += footer("en", depth) + chat("en", depth)
+    return out
+
+def guides_hub():
+    depth = 1; r = "../"; path = "/guides/"
+    title = "Car Coding Guides: CarPlay, SVM, CP, AMG Menu | autocodeRHV"
+    desc = "Car coding guides: CarPlay activation by model, Component Protection, SVM, Mercedes AMG menu, retrofits and import conversions."
+    list_ld = {"@context": "https://schema.org", "@type": "ItemList", "itemListElement": [
+        {"@type": "ListItem", "position": i + 1, "url": f"{SITE_URL}/guides/{g['slug']}/", "name": g["h1"]} for i, g in enumerate(GUIDES)]}
+    out = head("en", title, desc, path, depth, [ORG, list_ld], [("en", path), ("x-default", path)])
+    out += nav("en", depth, switch_href=r + "de/", switch_label="DE", home_anchor_prefix=r)
+    cards = "".join(f'<a href="{g["slug"]}/"><strong>{g["h1"]}</strong><span>{g["lede"]}</span></a>' for g in GUIDES)
+    out += f"""<main>
+  <section class="page-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="{r}">Home</a><span>/</span><span aria-current="page">Guides</span></nav>
+      <span class="eyebrow">Guides</span>
+      <h1 style="margin-top:.8rem">Car coding and programming guides</h1>
+      <p class="lede">Straight answers to the questions owners and workshops ask most, written by an automotive engineer.</p>
+    </div>
+  </section>
+  <section class="sec" style="padding-top:2.5rem">
+    <div class="wrap"><div class="related guides-list">{cards}</div></div>
+  </section>
+</main>
+"""
+    out += footer("en", depth) + chat("en", depth)
+    return out
+
 def notfound_page():
     out = head("en", "Page not found | autocodeRHV", "This page doesn't exist. Browse remote coding and programming services from autocodeRHV.", "/404.html", 0, [])
     out = out.replace(f'<meta name="robots" content="{ROBOTS}">', '<meta name="robots" content="noindex">')
@@ -565,9 +649,9 @@ def notfound_page():
     out += """<main><section class="notfound"><div class="wrap"><span class="eyebrow">Error 404</span><h1>Fault code: page not found.</h1><p>The page you're looking for doesn't exist. Head back to the services or ask the assistant.</p><a class="btn btn-amber" href="__BASE__">Back to home</a></div></section></main>
 """
     # 404 is served from any path, so use root-absolute asset links
-    out = out.replace('href="./"', 'href="__BASE__"').replace('href="favicon.svg"', 'href="__BASE__favicon.svg"').replace('href="assets/', 'href="__BASE__assets/').replace('href="/#', 'href="__BASE__#')
+    out = out.replace('href="./"', 'href="__BASE__"').replace('href="favicon.svg"', 'href="__BASE__favicon.svg"').replace('href="assets/', 'href="__BASE__assets/').replace('href="/#', 'href="__BASE__#').replace('href="guides/', 'href="__BASE__guides/')
     tail = footer("en", 0) + chat("en", 0)
-    tail = tail.replace('href="services/', 'href="__BASE__services/').replace('src="assets/', 'src="__BASE__assets/')
+    tail = tail.replace('href="services/', 'href="__BASE__services/').replace('src="assets/', 'src="__BASE__assets/').replace('href="guides/', 'href="__BASE__guides/').replace('href="in/', 'href="__BASE__in/').replace('href="ie/', 'href="__BASE__ie/').replace('href="uk/', 'href="__BASE__uk/').replace('href="us/', 'href="__BASE__us/').replace('href="ca/', 'href="__BASE__ca/')
     return (out + tail).replace("__BASE__", BASE_PATH)
 
 # ---------------------------------------------------------------- static extras
@@ -625,11 +709,14 @@ def main():
     write("de/index.html", home_page("de"))
     for s in SERVICES: write(f"services/{s['slug']}/index.html", service_page(s))
     for g in REGIONS: write(f"{g['code']}/index.html", region_page(g))
+    write("guides/index.html", guides_hub())
+    for g in GUIDES: write(f"guides/{g['slug']}/index.html", guide_page(g))
     write("404.html", notfound_page())
     write("favicon.svg", FAVICON)
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")
     urls = [("/", "1.0", HOME_ALTS), ("/de/", "0.9", HOME_ALTS)] + [(f"/{g['code']}/", "0.9", HOME_ALTS) for g in REGIONS]
     urls += [(f"/services/{s['slug']}/", "0.8", None) for s in SERVICES]
+    urls += [("/guides/", "0.7", None)] + [(f"/guides/{g['slug']}/", "0.7", None) for g in GUIDES]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
     for u, pr, alts in urls:
         sm += f"  <url><loc>{SITE_URL}{u}</loc><lastmod>{TODAY}</lastmod><priority>{pr}</priority>"

@@ -311,3 +311,7 @@ body{padding-top:env(safe-area-inset-top,0px)}
 .notfound h1{font-size:clamp(2.4rem,6vw,4rem)}
 .notfound p{color:var(--muted);margin:1rem 0 2rem}
 @media (max-width:480px){.nav-right .btn-amber{display:none}}
+
+.guides-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:800px){.guides-list{grid-template-columns:1fr}}
+.guides-list span{display:block;margin-top:.35rem}
